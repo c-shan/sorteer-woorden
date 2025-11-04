@@ -1,1 +1,911 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dutch Word Master - Learn Dutch Vocabulary</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4bb543;
+            --warning: #ffd166;
+            --danger: #ef476f;
+            --sidebar-width: 250px;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--dark);
+            min-height: 100vh;
+        }
+        
+        .container {
+            display: flex;
+            min-height: 100vh;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--secondary);
+            color: white;
+            padding: 20px 0;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .logo {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .logo h1 {
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .logo i {
+            color: var(--accent);
+        }
+        
+        .categories {
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        .category-item {
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+        }
+        
+        .category-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .category-item.active {
+            background: rgba(255,255,255,0.15);
+            border-left-color: var(--accent);
+        }
+        
+        .category-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Header */
+        .header {
+            background: white;
+            padding: 15px 30px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .user-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .language-selector {
+            padding: 8px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+        }
+        
+        /* Ad Banner */
+        .ad-banner {
+            background: linear-gradient(135deg, #ffd166, #ef476f);
+            color: white;
+            text-align: center;
+            padding: 12px;
+            font-size: 0.9rem;
+        }
+        
+        /* Content Area */
+        .content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+        
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .page-title {
+            margin-bottom: 25px;
+            color: var(--secondary);
+            font-size: 1.8rem;
+        }
+        
+        /* Vocabulary Table */
+        .vocabulary-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .vocabulary-table th {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .vocabulary-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .vocabulary-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .vocabulary-table tr:nth-child(even) {
+            background: #f8fbff;
+        }
+        
+        .dutch-word {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+        
+        .dutch-word:hover {
+            color: var(--primary);
+        }
+        
+        .translation {
+            font-style: italic;
+            color: #666;
+        }
+        
+        /* Dictation Styles */
+        .dictation-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .word-display {
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 25px 0;
+            color: var(--secondary);
+            padding: 25px;
+            background: linear-gradient(135deg, #f0f4ff, #e3eeff);
+            border-radius: 12px;
+            border: 2px dashed var(--accent);
+        }
+        
+        .input-container {
+            margin-bottom: 25px;
+        }
+        
+        #dutchInput {
+            width: 100%;
+            padding: 18px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+        
+        #dutchInput:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+            outline: none;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 25px 0;
+        }
+        
+        .action-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            background: var(--primary);
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.3);
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-5px) scale(1.1);
+        }
+        
+        .action-btn.hint {
+            background: var(--success);
+        }
+        
+        .action-btn.next {
+            background: var(--accent);
+        }
+        
+        .hint-box {
+            background: linear-gradient(135deg, #e8f5e8, #d4edda);
+            border-radius: 12px;
+            padding: 18px;
+            margin: 20px 0;
+            text-align: center;
+            font-style: italic;
+            color: var(--success);
+            border-left: 5px solid var(--success);
+            display: none;
+        }
+        
+        .result-card {
+            background: linear-gradient(135deg, #f0f8ff, #e6f3ff);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            margin-top: 20px;
+            border: 2px solid var(--accent);
+            display: none;
+        }
+        
+        .dutch-result {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .english-result {
+            font-size: 1.4rem;
+            color: var(--success);
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+        
+        .feedback {
+            font-size: 1.2rem;
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+        
+        .correct {
+            background: var(--success);
+            color: white;
+        }
+        
+        .incorrect {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 25px 0;
+            padding: 20px;
+            background: var(--light);
+            border-radius: 12px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        /* Right Sidebar Ads */
+        .right-sidebar {
+            width: 300px;
+            background: var(--light);
+            border-left: 1px solid #e0e0e0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .ad-square {
+            background: linear-gradient(135deg, #4cc9f0, #4361ee);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            min-height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        
+        .ad-square i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: var(--light);
+            border-top: 1px solid #e0e0e0;
+            color: #666;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .right-sidebar {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+            
+            .categories {
+                display: flex;
+                overflow-x: auto;
+            }
+            
+            .category-item {
+                white-space: nowrap;
+                border-left: none;
+                border-bottom: 4px solid transparent;
+            }
+            
+            .category-item.active {
+                border-left: none;
+                border-bottom-color: var(--accent);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Left Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <h1><i class="fas fa-language"></i> Dutch Master</h1>
+            </div>
+            <div class="categories">
+                <div class="category-item active" data-page="learn">
+                    <i class="fas fa-book-open"></i>Vocabulary Learning
+                </div>
+                <div class="category-item" data-page="dictation">
+                    <i class="fas fa-pencil-alt"></i>Dictation Practice
+                </div>
+                <div class="category-item" data-page="horica-food">
+                    <i class="fas fa-utensils"></i>Food & Dining
+                </div>
+                <div class="category-item" data-page="horica-menu">
+                    <i class="fas fa-list-alt"></i>Menu Terms
+                </div>
+                <div class="category-item" data-page="progress">
+                    <i class="fas fa-chart-line"></i>My Progress
+                </div>
+                <div class="category-item" data-page="mistakes">
+                    <i class="fas fa-redo"></i>Review Mistakes
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <h2>Learn Dutch Vocabulary</h2>
+                <div class="user-actions">
+                    <select class="language-selector" id="translationLang">
+                        <option value="en">English Translation</option>
+                        <option value="zh">Chinese Translation</option>
+                        <option value="tr">Turkish Translation</option>
+                        <option value="es">Spanish Translation</option>
+                        <option value="ja">Japanese Translation</option>
+                        <option value="ko">Korean Translation</option>
+                    </select>
+                    <button class="action-btn" style="width: auto; padding: 0 15px; border-radius: 20px;">
+                        <i class="fas fa-user"></i> Login
+                    </button>
+                </div>
+            </div>
+
+            <!-- Ad Banner -->
+            <div class="ad-banner">
+                🎉 Special Offer: Premium Dutch Course - 50% Off This Week Only!
+            </div>
+
+            <!-- Content Pages -->
+            <div class="content">
+                <!-- Vocabulary Learning Page -->
+                <div id="learnPage" class="page active">
+                    <h2 class="page-title">Dutch Vocabulary</h2>
+                    <table class="vocabulary-table">
+                        <thead>
+                            <tr>
+                                <th width="40%">Dutch Word</th>
+                                <th width="60%">Translation</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vocabularyList">
+                            <!-- Dynamic content -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Dictation Practice Page -->
+                <div id="dictationPage" class="page">
+                    <h2 class="page-title">Dictation Practice</h2>
+                    <div class="dictation-container">
+                        <div class="word-display" id="currentWordDisplay">
+                            <i class="fas fa-volume-up"></i> Click speaker to hear Dutch word
+                        </div>
+                        
+                        <div class="stats">
+                            <div class="stat-item">
+                                <div class="stat-value" id="wordsCompleted">0</div>
+                                <div class="stat-label">Completed</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="correctCount">0</div>
+                                <div class="stat-label">Correct</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="accuracy">0%</div>
+                                <div class="stat-label">Accuracy</div>
+                            </div>
+                        </div>
+                        
+                        <div class="input-container">
+                            <input type="text" id="dutchInput" placeholder="Type the Dutch word you hear..." autocomplete="off">
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button class="action-btn" id="speakBtn">
+                                <i class="fas fa-volume-up"></i>
+                            </button>
+                            <button class="action-btn hint" id="hintBtn">
+                                <i class="fas fa-lightbulb"></i>
+                            </button>
+                            <button class="action-btn next" id="nextBtn">
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="hint-box" id="hintBox">
+                            <i class="fas fa-info-circle"></i> 
+                            <span id="englishHint">Hint will appear here</span>
+                        </div>
+                        
+                        <div class="result-card" id="resultCard">
+                            <div class="dutch-result" id="dutchResult"></div>
+                            <div class="english-result" id="englishResult"></div>
+                            <div class="feedback" id="feedback"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other pages can be added here -->
+                <div id="horicaFoodPage" class="page">
+                    <h2 class="page-title">Food & Dining Vocabulary</h2>
+                    <table class="vocabulary-table">
+                        <thead>
+                            <tr>
+                                <th width="40%">Dutch Word</th>
+                                <th width="60%">Translation</th>
+                            </tr>
+                        </thead>
+                        <tbody id="horicaFoodList">
+                            <!-- Dynamic content -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+                <p>Dutch Word Master &copy; 2023 - Making Dutch Learning Easy</p>
+            </div>
+        </div>
+
+        <!-- Right Sidebar Ads -->
+        <div class="right-sidebar">
+            <div class="ad-square">
+                <i class="fas fa-graduation-cap"></i>
+                <h3>Premium Course</h3>
+                <p>Unlock all features</p>
+            </div>
+            <div class="ad-square">
+                <i class="fas fa-mobile-alt"></i>
+                <h3>Mobile App</h3>
+                <p>Learn on the go</p>
+            </div>
+            <div class="ad-square">
+                <i class="fas fa-headset"></i>
+                <h3>Live Tutoring</h3>
+                <p>Book a session</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Vocabulary Data with multiple translations
+        const vocabularyData = {
+            'basic': [
+                {
+                    dutch: "hallo",
+                    translations: {
+                        en: "hello",
+                        zh: "你好",
+                        tr: "merhaba",
+                        es: "hola",
+                        ja: "こんにちは",
+                        ko: "안녕하세요"
+                    }
+                },
+                {
+                    dutch: "bedankt",
+                    translations: {
+                        en: "thank you",
+                        zh: "谢谢",
+                        tr: "teşekkür ederim",
+                        es: "gracias",
+                        ja: "ありがとう",
+                        ko: "감사합니다"
+                    }
+                },
+                {
+                    dutch: "alsjeblieft",
+                    translations: {
+                        en: "please",
+                        zh: "请",
+                        tr: "lütfen",
+                        es: "por favor",
+                        ja: "お願いします",
+                        ko: "제발"
+                    }
+                }
+            ],
+            'horica-food': [
+                {
+                    dutch: "ontbijt",
+                    translations: {
+                        en: "breakfast",
+                        zh: "早餐",
+                        tr: "kahvaltı",
+                        es: "desayuno",
+                        ja: "朝食",
+                        ko: "아침 식사"
+                    }
+                },
+                {
+                    dutch: "lunch",
+                    translations: {
+                        en: "lunch",
+                        zh: "午餐",
+                        tr: "öğle yemeği",
+                        es: "almuerzo",
+                        ja: "昼食",
+                        ko: "점심 식사"
+                    }
+                },
+                {
+                    dutch: "diner",
+                    translations: {
+                        en: "dinner",
+                        zh: "晚餐",
+                        tr: "akşam yemeği",
+                        es: "cena",
+                        ja: "夕食",
+                        ko: "저녁 식사"
+                    }
+                },
+                {
+                    dutch: "soep",
+                    translations: {
+                        en: "soup",
+                        zh: "汤",
+                        tr: "çorba",
+                        es: "sopa",
+                        ja: "スープ",
+                        ko: "수프"
+                    }
+                }
+            ]
+        };
+
+        // DOM Elements
+        const categoryItems = document.querySelectorAll('.category-item');
+        const pages = document.querySelectorAll('.page');
+        const vocabularyList = document.getElementById('vocabularyList');
+        const horicaFoodList = document.getElementById('horicaFoodList');
+        const translationLang = document.getElementById('translationLang');
+        const dutchInput = document.getElementById('dutchInput');
+        const speakBtn = document.getElementById('speakBtn');
+        const hintBtn = document.getElementById('hintBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const hintBox = document.getElementById('hintBox');
+        const englishHint = document.getElementById('englishHint');
+        const resultCard = document.getElementById('resultCard');
+        const dutchResult = document.getElementById('dutchResult');
+        const englishResult = document.getElementById('englishResult');
+        const feedback = document.getElementById('feedback');
+        const currentWordDisplay = document.getElementById('currentWordDisplay');
+        const wordsCompleted = document.getElementById('wordsCompleted');
+        const correctCount = document.getElementById('correctCount');
+        const accuracy = document.getElementById('accuracy');
+
+        // State variables
+        let currentWord = null;
+        let hintUsed = false;
+        let completedWords = 0;
+        let correctAnswers = 0;
+        let currentTranslationLang = 'en';
+
+        // Initialize
+        function init() {
+            loadVocabulary('basic');
+            setupEventListeners();
+            startDictation();
+        }
+
+        // Event Listeners
+        function setupEventListeners() {
+            // Category navigation
+            categoryItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const pageId = item.dataset.page;
+                    showPage(pageId);
+                    
+                    // Update active state
+                    categoryItems.forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                });
+            });
+
+            // Translation language change
+            translationLang.addEventListener('change', (e) => {
+                currentTranslationLang = e.target.value;
+                loadVocabulary('basic');
+                loadHoricaFood();
+            });
+
+            // Dictation actions
+            speakBtn.addEventListener('click', () => {
+                if (currentWord) speakWord(currentWord.dutch);
+            });
+            
+            hintBtn.addEventListener('click', showEnglishHint);
+            nextBtn.addEventListener('click', nextWord);
+            
+            dutchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') checkSpelling();
+            });
+        }
+
+        // Page Navigation
+        function showPage(pageId) {
+            pages.forEach(page => page.classList.remove('active'));
+            
+            switch(pageId) {
+                case 'learn':
+                    document.getElementById('learnPage').classList.add('active');
+                    loadVocabulary('basic');
+                    break;
+                case 'dictation':
+                    document.getElementById('dictationPage').classList.add('active');
+                    startDictation();
+                    break;
+                case 'horica-food':
+                    document.getElementById('horicaFoodPage').classList.add('active');
+                    loadHoricaFood();
+                    break;
+                default:
+                    document.getElementById('learnPage').classList.add('active');
+            }
+        }
+
+        // Load vocabulary into table
+        function loadVocabulary(category) {
+            const words = vocabularyData[category] || [];
+            vocabularyList.innerHTML = '';
+            
+            words.forEach(word => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <div class="dutch-word" onclick="speakWord('${word.dutch}')">
+                            <i class="fas fa-volume-up"></i>
+                            ${word.dutch}
+                        </div>
+                    </td>
+                    <td class="translation">${word.translations[currentTranslationLang]}</td>
+                `;
+                vocabularyList.appendChild(row);
+            });
+        }
+
+        function loadHoricaFood() {
+            const words = vocabularyData['horica-food'] || [];
+            horicaFoodList.innerHTML = '';
+            
+            words.forEach(word => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <div class="dutch-word" onclick="speakWord('${word.dutch}')">
+                            <i class="fas fa-volume-up"></i>
+                            ${word.dutch}
+                        </div>
+                    </td>
+                    <td class="translation">${word.translations[currentTranslationLang]}</td>
+                `;
+                horicaFoodList.appendChild(row);
+            });
+        }
+
+        // Speech function
+        function speakWord(word) {
+            if ('speechSynthesis' in window) {
+                speechSynthesis.cancel();
+                
+                const utterance = new SpeechSynthesisUtterance(word);
+                utterance.lang = 'nl-NL';
+                utterance.rate = 0.9;
+                
+                const dutchVoices = speechSynthesis.getVoices().filter(voice => 
+                    voice.lang === 'nl-NL' || voice.lang === 'nl'
+                );
+                
+                if (dutchVoices.length > 0) {
+                    utterance.voice = dutchVoices[0];
+                }
+                
+                speechSynthesis.speak(utterance);
+                
+                if (document.getElementById('dictationPage').classList.contains('active')) {
+                    currentWordDisplay.innerHTML = `<i class="fas fa-volume-up"></i> Listening...`;
+                    setTimeout(() => {
+                        currentWordDisplay.textContent = "Type what you heard";
+                    }, 1000);
+                }
+            }
+        }
+
+        // Dictation functions
+        function startDictation() {
+            const basicWords = vocabularyData['basic'];
+            currentWord = basicWords[Math.floor(Math.random() * basicWords.length)];
+            currentWordDisplay.innerHTML = '<i class="fas fa-volume-up"></i> Click speaker to hear Dutch word';
+            speakWord(currentWord.dutch);
+            dutchInput.value = '';
+            resultCard.style.display = 'none';
+            hintBox.style.display = 'none';
+            hintUsed = false;
+            dutchInput.focus();
+        }
+
+        function showEnglishHint() {
+            if (currentWord) {
+                englishHint.textContent = currentWord.translations[currentTranslationLang];
+                hintBox.style.display = 'block';
+                hintUsed = true;
+            }
+        }
+
+        function checkSpelling() {
+            const userInput = dutchInput.value.trim().toLowerCase();
+            if (!userInput) return;
+            
+            completedWords++;
+            wordsCompleted.textContent = completedWords;
+            
+            resultCard.style.display = 'block';
+            dutchResult.textContent = currentWord.dutch;
+            englishResult.textContent = currentWord.translations[currentTranslationLang];
+            
+            if (userInput === currentWord.dutch.toLowerCase()) {
+                feedback.textContent = "Correct! Well done!";
+                feedback.className = "feedback correct";
+                correctAnswers++;
+            } else {
+                feedback.textContent = "Incorrect. Try again!";
+                feedback.className = "feedback incorrect";
+            }
+            
+            correctCount.textContent = correctAnswers;
+            const accuracyRate = completedWords > 0 ? Math.round((correctAnswers / completedWords) * 100) : 0;
+            accuracy.textContent = `${accuracyRate}%`;
+        }
+
+        function nextWord() {
+            startDictation();
+        }
+
+        // Initialize the app
+        window.addEventListener('load', init);
+        window.speakWord = speakWord;
+    </script>
+</body>
+</html>
