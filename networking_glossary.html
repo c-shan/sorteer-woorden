@@ -2323,12 +2323,12 @@
                     
                     termRow.innerHTML = `
                         <td class="term-column">
-                            <div class="term-english">${term.term}</div>
+                            <div class="term-english" onclick="speakTerm('${term.term}')">${term.term}</div>
                             <div class="term-chinese">${term.chinese.split('：')[1] || term.chinese}</div>
                             <div class="term-status ${isStudied ? 'studied' : ''}" data-term="${term.term}"></div>
                         </td>
                         <td class="explanation-column">
-                            <div class="explanation-english">${term.explanation}</div>
+                            <div class="explanation-english" onclick="speakTerm('${tern.explanation}')">${term.explanation}</div>
                             <div class="explanation-chinese">${term.chinese}</div>
                         </td>
                         <td class="image-column">
@@ -2385,6 +2385,17 @@
                 
                 localStorage.setItem('studiedTerms', JSON.stringify(studiedTerms));
                 renderTerms();
+            }
+             // 发音功能
+            function speakTerm(term) {
+                if ('speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance(term);
+                    utterance.lang = 'en-US';
+                    utterance.rate = 0.8;
+                    speechSynthesis.speak(utterance);
+                } else {
+                    alert('您的浏览器不支持文本转语音功能');
+                }
             }
             
             // Event listeners
