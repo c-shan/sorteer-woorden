@@ -110,48 +110,91 @@
             font-size: 1rem;
         }
         
-        .terms-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 1.5rem;
-        }
-        
-        .term-card {
+        .terms-table {
+            width: 100%;
+            border-collapse: collapse;
             background-color: white;
-            border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
             overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         
-        .term-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .term-header {
+        .terms-table th {
             background-color: var(--secondary-color);
             color: white;
             padding: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            text-align: left;
         }
         
-        .term-name {
+        .terms-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            vertical-align: top;
+        }
+        
+        .terms-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .terms-table tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .term-column {
+            width: 20%;
             font-weight: bold;
-            font-size: 1.2rem;
+        }
+        
+        .explanation-column {
+            width: 55%;
+        }
+        
+        .image-column {
+            width: 25%;
+            text-align: center;
+        }
+        
+        .term-english {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .term-chinese {
+            color: #666;
+            font-style: italic;
+        }
+        
+        .explanation-english {
+            margin-bottom: 0.5rem;
+        }
+        
+        .explanation-chinese {
+            color: #666;
+            font-style: italic;
+        }
+        
+        .term-image {
+            max-width: 100%;
+            max-height: 150px;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .no-image {
+            color: #999;
+            font-style: italic;
         }
         
         .term-status {
             width: 24px;
             height: 24px;
             border-radius: 50%;
-            background-color: rgba(255,255,255,0.3);
+            background-color: rgba(0,0,0,0.1);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
+            margin-top: 0.5rem;
         }
         
         .term-status.studied {
@@ -162,39 +205,6 @@
             content: "✓";
             color: white;
             font-weight: bold;
-        }
-        
-        .term-content {
-            padding: 1rem;
-        }
-        
-        .term-image {
-            width: 100%;
-            height: 150px;
-            background-color: #f8f9fa;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1rem;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-        
-        .term-image img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-        
-        .term-explanation {
-            margin-bottom: 1rem;
-        }
-        
-        .term-translation {
-            border-top: 1px solid #eee;
-            padding-top: 1rem;
-            font-style: italic;
-            color: #666;
         }
         
         .pagination {
@@ -232,8 +242,9 @@
         }
         
         @media (max-width: 768px) {
-            .terms-grid {
-                grid-template-columns: 1fr;
+            .terms-table {
+                display: block;
+                overflow-x: auto;
             }
             
             .controls {
@@ -278,9 +289,18 @@
             </div>
         </div>
         
-        <div class="terms-grid" id="termsGrid">
-            <!-- Terms will be dynamically inserted here -->
-        </div>
+        <table class="terms-table" id="termsTable">
+            <thead>
+                <tr>
+                    <th class="term-column">Term</th>
+                    <th class="explanation-column">Explanation</th>
+                    <th class="image-column">Image</th>
+                </tr>
+            </thead>
+            <tbody id="termsBody">
+                <!-- Terms will be dynamically inserted here -->
+            </tbody>
+        </table>
         
         <div class="pagination" id="pagination">
             <!-- Pagination buttons will be dynamically inserted here -->
@@ -292,23 +312,23 @@
     </footer>
 
     <script>
-        // Sample data for networking terms
+        // Complete data for networking terms
         const networkingTerms = [
             {
                 term: "10Base2",
-                image: "https://via.placeholder.com/300x150?text=10Base2+Cable",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/BNC_connector.jpg/320px-BNC_connector.jpg",
                 explanation: "An Ethernet standard that uses thin coaxial cable (thinnet) with a maximum segment length of 185 meters.",
                 chinese: "10Base2：使用细同轴电缆（细缆）的以太网标准，最大网段长度为185米。"
             },
             {
                 term: "10Base5",
-                image: "https://via.placeholder.com/300x150?text=10Base5+Cable",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/10BASE5_Transceiver.jpg/320px-10BASE5_Transceiver.jpg",
                 explanation: "The original Ethernet standard that uses thick coaxial cable with a maximum segment length of 500 meters.",
                 chinese: "10Base5：原始以太网标准，使用粗同轴电缆，最大网段长度为500米。"
             },
             {
                 term: "10BaseT",
-                image: "https://via.placeholder.com/300x150?text=10BaseT+Connection",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/RJ-45_connector.jpg/320px-RJ-45_connector.jpg",
                 explanation: "An Ethernet standard that uses twisted-pair cable with a maximum segment length of 100 meters.",
                 chinese: "10BaseT：使用双绞线电缆的以太网标准，最大网段长度为100米。"
             },
@@ -324,7 +344,7 @@
             },
             {
                 term: "100BaseTX",
-                image: "https://via.placeholder.com/300x150?text=100BaseTX",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/RJ-45_connector.jpg/320px-RJ-45_connector.jpg",
                 explanation: "A Fast Ethernet standard that uses two pairs of Category 5 UTP or STP cable.",
                 chinese: "100BaseTX：使用两对5类UTP或STP电缆的快速以太网标准。"
             },
@@ -345,33 +365,37 @@
             },
             {
                 term: "802.3",
-                image: "https://via.placeholder.com/300x150?text=802.3+Ethernet",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Ethernet_networking_board.jpg/320px-Ethernet_networking_board.jpg",
                 explanation: "The IEEE standard for Ethernet networks.",
                 chinese: "802.3：以太网网络的IEEE标准。"
             },
             {
                 term: "802.11",
-                image: "https://via.placeholder.com/300x150?text=802.11+WiFi",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Wi-Fi_Logo.svg/320px-Wi-Fi_Logo.svg.png",
                 explanation: "The IEEE standard for wireless networking.",
                 chinese: "802.11：无线网络的IEEE标准。"
             },
             {
                 term: "8088 processor",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Intel_8088.jpg/320px-Intel_8088.jpg",
                 explanation: "An early Intel microprocessor used in the original IBM PC.",
                 chinese: "8088处理器：早期英特尔微处理器，用于原始IBM PC。"
             },
             {
                 term: "80286 processor",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Intel_80286.jpg/320px-Intel_80286.jpg",
                 explanation: "A 16-bit microprocessor introduced by Intel in 1982.",
                 chinese: "80286处理器：英特尔于1982年推出的16位微处理器。"
             },
             {
                 term: "80386 processor",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Intel_80386DX.jpg/320px-Intel_80386DX.jpg",
                 explanation: "A 32-bit microprocessor introduced by Intel in 1985.",
                 chinese: "80386处理器：英特尔于1985年推出的32位微处理器。"
             },
             {
                 term: "80486 processor",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Intel_80486DX2_top.jpg/320px-Intel_80486DX2_top.jpg",
                 explanation: "A 32-bit microprocessor introduced by Intel in 1989.",
                 chinese: "80486处理器：英特尔于1989年推出的32位微处理器。"
             },
@@ -397,7 +421,7 @@
             },
             {
                 term: "Active Directory",
-                image: "https://via.placeholder.com/300x150?text=Active+Directory",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/e/e1/Active_Directory_Logo.svg/320px-Active_Directory_Logo.svg.png",
                 explanation: "Microsoft's directory service for Windows domain networks.",
                 chinese: "Active Directory：微软用于Windows域网络的目录服务。"
             },
@@ -408,7 +432,7 @@
             },
             {
                 term: "adapter card",
-                image: "https://via.placeholder.com/300x150?text=Network+Adapter",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Network_card.jpg/320px-Network_card.jpg",
                 explanation: "A circuit board that adds functionality to a computer.",
                 chinese: "适配卡：为计算机添加功能的电路板。"
             },
@@ -429,6 +453,7 @@
             },
             {
                 term: "AGP",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/AGP_slot.jpg/320px-AGP_slot.jpg",
                 explanation: "Accelerated Graphics Port, a high-speed point-to-point channel for attaching a video card.",
                 chinese: "AGP：加速图形端口，用于连接显卡的高速点对点通道。"
             },
@@ -439,13 +464,13 @@
             },
             {
                 term: "antivirus program",
-                image: "https://via.placeholder.com/300x150?text=Antivirus",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Antivirus_Software.png/320px-Antivirus_Software.png",
                 explanation: "Software designed to detect and remove computer viruses.",
                 chinese: "防病毒程序：设计用于检测和删除计算机病毒的软件。"
             },
             {
                 term: "Apache",
-                image: "https://via.placeholder.com/300x150?text=Apache+Web+Server",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Apache_HTTP_server_logo_%282019-present%29.svg/320px-Apache_HTTP_server_logo_%282019-present%29.svg.png",
                 explanation: "A popular open-source web server software.",
                 chinese: "Apache：流行的开源Web服务器软件。"
             },
@@ -458,13 +483,1788 @@
                 term: "application layer",
                 explanation: "The seventh layer of the OSI model, where network applications and protocols operate.",
                 chinese: "应用层：OSI模型的第七层，网络应用程序和协议在此运行。"
+            },
+            {
+                term: "archive bit",
+                explanation: "A file attribute that indicates whether a file has been backed up.",
+                chinese: "归档位：指示文件是否已备份的文件属性。"
+            },
+            {
+                term: "ARCnet",
+                explanation: "Attached Resource Computer NETwork, an early LAN technology developed in 1976.",
+                chinese: "ARCnet：附加资源计算机网络，1976年开发的早期LAN技术。"
+            },
+            {
+                term: "Athlon",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/AMD_Athlon_64_3200%2B_%28Venice%29.jpg/320px-AMD_Athlon_64_3200%2B_%28Venice%29.jpg",
+                explanation: "A family of x86-compatible microprocessors from AMD.",
+                chinese: "Athlon：AMD的x86兼容微处理器系列。"
+            },
+            {
+                term: "attributes",
+                explanation: "Properties or characteristics of a file or directory.",
+                chinese: "属性：文件或目录的属性或特征。"
+            },
+            {
+                term: "AUI",
+                explanation: "Attachment Unit Interface, a 15-pin connector used with early Ethernet networks.",
+                chinese: "AUI：附件单元接口，用于早期以太网网络的15针连接器。"
+            },
+            {
+                term: "AUTOEXEC.BAT",
+                explanation: "A system file in DOS that runs commands automatically at startup.",
+                chinese: "AUTOEXEC.BAT：DOS中的系统文件，在启动时自动运行命令。"
+            },
+            {
+                term: "AUTOEXEC.NCF",
+                explanation: "A startup file in NetWare that executes commands when the server starts.",
+                chinese: "AUTOEXEC.NCF：NetWare中的启动文件，在服务器启动时执行命令。"
+            },
+            {
+                term: "backbone",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/NetworkTopology-FatTree.svg/320px-NetworkTopology-FatTree.svg.png",
+                explanation: "The central part of a network that connects different segments.",
+                chinese: "骨干网：连接不同网段的网络中心部分。"
+            },
+            {
+                term: "backOffice",
+                explanation: "A suite of Microsoft server applications for businesses.",
+                chinese: "backOffice：微软为企业提供的服务器应用程序套件。"
+            },
+            {
+                term: "backup",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Data_Backup_icon.png/320px-Data_Backup_icon.png",
+                explanation: "The process of copying data to protect against loss.",
+                chinese: "备份：复制数据以防止丢失的过程。"
+            },
+            {
+                term: "banner",
+                explanation: "A message displayed when connecting to a network service.",
+                chinese: "横幅：连接到网络服务时显示的消息。"
+            },
+            {
+                term: "batch file",
+                explanation: "A script file containing a series of commands to be executed.",
+                chinese: "批处理文件：包含要执行的一系列命令的脚本文件。"
+            },
+            {
+                term: "BDC",
+                explanation: "Backup Domain Controller, a server that maintains a copy of the domain security database.",
+                chinese: "BDC：备份域控制器，维护域安全数据库副本的服务器。"
+            },
+            {
+                term: "benchmark",
+                explanation: "A standard used to measure performance or quality.",
+                chinese: "基准：用于衡量性能或质量的标准。"
+            },
+            {
+                term: "bluebook",
+                explanation: "A specification for CD-ROM and CD-R formats.",
+                chinese: "蓝皮书：CD-ROM和CD-R格式的规范。"
+            },
+            {
+                term: "BNC connector",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/BNC_connector.jpg/320px-BNC_connector.jpg",
+                explanation: "A type of connector used with coaxial cables.",
+                chinese: "BNC连接器：用于同轴电缆的连接器类型。"
+            },
+            {
+                term: "bottleneck",
+                explanation: "A point in a system where performance is limited.",
+                chinese: "瓶颈：系统中性能受到限制的点。"
+            },
+            {
+                term: "bridge",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Network_bridge.svg/320px-Network_bridge.svg.png",
+                explanation: "A device that connects two network segments at the data link layer.",
+                chinese: "网桥：在数据链路层连接两个网段的设备。"
+            },
+            {
+                term: "broadband",
+                explanation: "A high-speed internet connection that uses multiple frequencies.",
+                chinese: "宽带：使用多个频率的高速互联网连接。"
+            },
+            {
+                term: "buffer",
+                explanation: "A temporary storage area for data.",
+                chinese: "缓冲区：数据的临时存储区域。"
+            },
+            {
+                term: "bus",
+                explanation: "A communication system that transfers data between components.",
+                chinese: "总线：在组件之间传输数据的通信系统。"
+            },
+            {
+                term: "cable tie",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Cable_ties.jpg/320px-Cable_ties.jpg",
+                explanation: "A fastener used to bundle cables together.",
+                chinese: "电缆扎带：用于将电缆捆绑在一起的紧固件。"
+            },
+            {
+                term: "cache",
+                explanation: "A high-speed storage mechanism.",
+                chinese: "缓存：高速存储机制。"
+            },
+            {
+                term: "Category 3",
+                explanation: "A type of UTP cable rated for 10 Mbps Ethernet.",
+                chinese: "3类电缆：额定用于10 Mbps以太网的UTP电缆类型。"
+            },
+            {
+                term: "Category 5",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cat5.jpg/320px-Cat5.jpg",
+                explanation: "A type of UTP cable rated for 100 Mbps Ethernet.",
+                chinese: "5类电缆：额定用于100 Mbps以太网的UTP电缆类型。"
+            },
+            {
+                term: "Category 6",
+                explanation: "A type of UTP cable rated for 1 Gbps Ethernet.",
+                chinese: "6类电缆：额定用于1 Gbps以太网的UTP电缆类型。"
+            },
+            {
+                term: "CD-R drive",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/CD_drive.jpg/320px-CD_drive.jpg",
+                explanation: "A device that can read and write CD-R discs.",
+                chinese: "CD-R驱动器：可以读取和写入CD-R光盘的设备。"
+            },
+            {
+                term: "CD-ROM",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/CD_icon.svg/320px-CD_icon.svg.png",
+                explanation: "Compact Disc Read-Only Memory, an optical disc for data storage.",
+                chinese: "CD-ROM：光盘只读存储器，用于数据存储的光盘。"
+            },
+            {
+                term: "CD-RW drive",
+                explanation: "A device that can read, write, and rewrite CD-RW discs.",
+                chinese: "CD-RW驱动器：可以读取、写入和重写CD-RW光盘的设备。"
+            },
+            {
+                term: "Certified NetWare Engineer",
+                explanation: "A certification for NetWare network professionals.",
+                chinese: "认证NetWare工程师：NetWare网络专业人员的认证。"
+            },
+            {
+                term: "Certified Network Dummy",
+                explanation: "A humorous term for someone with little networking knowledge.",
+                chinese: "认证网络新手：对网络知识很少的人的幽默称呼。"
+            },
+            {
+                term: "chat",
+                explanation: "Real-time text communication between users.",
+                chinese: "聊天：用户之间的实时文本通信。"
+            },
+            {
+                term: "Chaucer",
+                explanation: "Code name for an early version of Microsoft Windows.",
+                chinese: "Chaucer：早期版本Microsoft Windows的代号。"
+            },
+            {
+                term: "cheapernet",
+                explanation: "A nickname for 10Base2 Ethernet due to its lower cost.",
+                chinese: "廉价网：由于成本较低，10Base2以太网的昵称。"
+            },
+            {
+                term: "CHKDSK",
+                explanation: "A command to check a disk for errors.",
+                chinese: "CHKDSK：检查磁盘错误的命令。"
+            },
+            {
+                term: "click",
+                explanation: "The action of pressing a mouse button.",
+                chinese: "点击：按下鼠标按钮的动作。"
+            },
+            {
+                term: "client/server",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Client-server-model.svg/320px-Client-server-model.svg.png",
+                explanation: "A network architecture where clients request services from servers.",
+                chinese: "客户端/服务器：客户端从服务器请求服务的网络架构。"
+            },
+            {
+                term: "Clouseau",
+                explanation: "Code name for an early Microsoft networking product.",
+                chinese: "Clouseau：早期微软网络产品的代号。"
+            },
+            {
+                term: "cluster",
+                explanation: "A group of independent computers working together as a single system.",
+                chinese: "集群：作为单个系统一起工作的独立计算机组。"
+            },
+            {
+                term: "coaxial cable",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Coaxial_cable_cutaway.svg/320px-Coaxial_cable_cutaway.svg.png",
+                explanation: "A type of cable with a central conductor surrounded by insulation.",
+                chinese: "同轴电缆：具有中心导体并被绝缘层包围的电缆类型。"
+            },
+            {
+                term: "Com1,Com2",
+                explanation: "Serial communication ports on a computer.",
+                chinese: "Com1,Com2：计算机上的串行通信端口。"
+            },
+            {
+                term: "computername",
+                explanation: "The unique name assigned to a computer on a network.",
+                chinese: "计算机名：网络上分配给计算机的唯一名称。"
+            },
+            {
+                term: "cone of silence",
+                explanation: "A humorous term for network security through obscurity.",
+                chinese: "沉默锥：通过隐蔽实现网络安全的幽默术语。"
+            },
+            {
+                term: "CONFIG.SYS",
+                explanation: "A configuration file in DOS that loads device drivers.",
+                chinese: "CONFIG.SYS：DOS中加载设备驱动程序的配置文件。"
+            },
+            {
+                term: "CONSOLE",
+                explanation: "The main administrative interface for a network operating system.",
+                chinese: "控制台：网络操作系统的主要管理界面。"
+            },
+            {
+                term: "console operator",
+                explanation: "A user with permissions to manage network operations.",
+                chinese: "控制台操作员：具有管理网络操作权限的用户。"
+            },
+            {
+                term: "Control Panel",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Control_Panel_Windows_10.png/320px-Control_Panel_Windows_10.png",
+                explanation: "A component of Microsoft Windows that allows users to view system settings.",
+                chinese: "控制面板：Microsoft Windows的组件，允许用户查看系统设置。"
+            },
+            {
+                term: "CPU",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Conroe.jpg/320px-Conroe.jpg",
+                explanation: "Central Processing Unit, the primary component of a computer.",
+                chinese: "CPU：中央处理器，计算机的主要组件。"
+            },
+            {
+                term: "crimp tool",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Crimping_tool.jpg/320px-Crimping_tool.jpg",
+                explanation: "A tool used to attach connectors to cables.",
+                chinese: "压线钳：用于将连接器连接到电缆的工具。"
+            },
+            {
+                term: "cross-over cable",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Crossover_cable.jpg/320px-Crossover_cable.jpg",
+                explanation: "A cable that connects two similar devices directly.",
+                chinese: "交叉电缆：直接连接两个类似设备的电缆。"
+            },
+            {
+                term: "CSMA/CN",
+                explanation: "Carrier Sense Multiple Access with Collision Notification, a network access method.",
+                chinese: "CSMA/CN：带冲突通知的载波侦听多路访问，一种网络访问方法。"
+            },
+            {
+                term: "daisy-chain",
+                explanation: "Connecting devices in series, one after another.",
+                chinese: "菊花链：将设备串联连接，一个接一个。"
+            },
+            {
+                term: "DAT",
+                explanation: "Digital Audio Tape, a format for data storage.",
+                chinese: "DAT：数字音频磁带，一种数据存储格式。"
+            },
+            {
+                term: "data-link layer",
+                explanation: "The second layer of the OSI model, responsible for node-to-node communication.",
+                chinese: "数据链路层：OSI模型的第二层，负责节点到节点的通信。"
+            },
+            {
+                term: "dedicated server",
+                explanation: "A server used exclusively for network services.",
+                chinese: "专用服务器：专门用于网络服务的服务器。"
+            },
+            {
+                term: "delayed write",
+                explanation: "A caching technique where data is written to cache before being written to disk.",
+                chinese: "延迟写入：一种缓存技术，数据在写入磁盘之前先写入缓存。"
+            },
+            {
+                term: "differential backup",
+                explanation: "A backup that copies all files changed since the last full backup.",
+                chinese: "差异备份：复制自上次完全备份以来更改的所有文件的备份。"
+            },
+            {
+                term: "DIP switch",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/DIP_switch_01.jpg/320px-DIP_switch_01.jpg",
+                explanation: "A set of small switches in a dual in-line package.",
+                chinese: "DIP开关：双列直插封装中的一组小开关。"
+            },
+            {
+                term: "directory hash",
+                explanation: "A technique for speeding up directory searches.",
+                chinese: "目录哈希：加速目录搜索的技术。"
+            },
+            {
+                term: "disk",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Magnetic_disk_read_write_heads.jpg/320px-Magnetic_disk_read_write_heads.jpg",
+                explanation: "A storage device that uses magnetic storage to store data.",
+                chinese: "磁盘：使用磁存储来存储数据的存储设备。"
+            },
+            {
+                term: "distribution",
+                explanation: "A version of a Linux operating system.",
+                chinese: "发行版：Linux操作系统的版本。"
+            },
+            {
+                term: "DMA channel",
+                explanation: "Direct Memory Access channel, allows devices to access memory directly.",
+                chinese: "DMA通道：直接内存访问通道，允许设备直接访问内存。"
+            },
+            {
+                term: "DNS",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/DNS.svg/320px-DNS.svg.png",
+                explanation: "Domain Name System, translates domain names to IP addresses.",
+                chinese: "DNS：域名系统，将域名转换为IP地址。"
+            },
+            {
+                term: "domain",
+                explanation: "A group of computers and devices on a network that share a common directory database.",
+                chinese: "域：网络上共享公共目录数据库的计算机和设备组。"
+            },
+            {
+                term: "Domain Name System (DNS)",
+                explanation: "A hierarchical naming system for computers, services, or resources connected to the Internet.",
+                chinese: "域名系统（DNS）：用于连接到Internet的计算机、服务或资源的分层命名系统。"
+            },
+            {
+                term: "DOS",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Microsoft-DOS-logo.svg/320px-Microsoft-DOS-logo.svg.png",
+                explanation: "Disk Operating System, an early operating system for personal computers.",
+                chinese: "DOS：磁盘操作系统，早期的个人计算机操作系统。"
+            },
+            {
+                term: "dot-matrix printer",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Epson_SQ-2000_dot_matrix_printer.jpg/320px-Epson_SQ-2000_dot_matrix_printer.jpg",
+                explanation: "A type of printer that uses a matrix of small pins to create characters.",
+                chinese: "点阵打印机：使用小针矩阵创建字符的打印机类型。"
+            },
+            {
+                term: "dumb terminal",
+                explanation: "A computer terminal with no processing capabilities of its own.",
+                chinese: "哑终端：没有自身处理能力的计算机终端。"
+            },
+            {
+                term: "DVD drive",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/DVD_drive.jpg/320px-DVD_drive.jpg",
+                explanation: "A device that reads DVD discs.",
+                chinese: "DVD驱动器：读取DVD光盘的设备。"
+            },
+            {
+                term: "Eddie Haskell",
+                explanation: "A code name for an early Microsoft networking product.",
+                chinese: "Eddie Haskell：早期微软网络产品的代号。"
+            },
+            {
+                term: "e-mail",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Mail_%28iOS%29.svg/320px-Mail_%28iOS%29.svg.png",
+                explanation: "Electronic mail, a method of exchanging digital messages.",
+                chinese: "电子邮件：交换数字消息的方法。"
+            },
+            {
+                term: "emoticon",
+                explanation: "A representation of a facial expression using characters.",
+                chinese: "表情符号：使用字符表示面部表情。"
+            },
+            {
+                term: "encryption",
+                explanation: "The process of encoding information to prevent unauthorized access.",
+                chinese: "加密：编码信息以防止未经授权访问的过程。"
+            },
+            {
+                term: "enterprise computing",
+                explanation: "The use of computers in a business or organization.",
+                chinese: "企业计算：在商业或组织中使用计算机。"
+            },
+            {
+                term: "Ethernet",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Ethernet_RJ45_connector_p1160054.jpg/320px-Ethernet_RJ45_connector_p1160054.jpg",
+                explanation: "A family of networking technologies for local area networks.",
+                chinese: "以太网：用于局域网的一系列网络技术。"
+            },
+            {
+                term: "EtherTalk",
+                explanation: "A protocol that allows AppleTalk networks to run over Ethernet.",
+                chinese: "EtherTalk：允许AppleTalk网络在以太网上运行的协议。"
+            },
+            {
+                term: "ETLA",
+                explanation: "Extended Three-Letter Acronym, a humorous term for longer acronyms.",
+                chinese: "ETLA：扩展三字母首字母缩略词，对较长首字母缩略词的幽默称呼。"
+            },
+            {
+                term: "Exchange Server",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Microsoft_Exchange_Server_2013_logo.svg/320px-Microsoft_Exchange_Server_2013_logo.svg.png",
+                explanation: "A mail server and calendaring server developed by Microsoft.",
+                chinese: "Exchange Server：微软开发的邮件服务器和日历服务器。"
+            },
+            {
+                term: "Fast Ethernet",
+                explanation: "Ethernet standard that provides 100 Mbps transmission speed.",
+                chinese: "快速以太网：提供100 Mbps传输速度的以太网标准。"
+            },
+            {
+                term: "FAT",
+                explanation: "File Allocation Table, a file system developed for MS-DOS.",
+                chinese: "FAT：文件分配表，为MS-DOS开发的文件系统。"
+            },
+            {
+                term: "FAT32",
+                explanation: "A version of the FAT file system that supports larger disk sizes.",
+                chinese: "FAT32：支持较大磁盘大小的FAT文件系统版本。"
+            },
+            {
+                term: "FDDI",
+                explanation: "Fiber Distributed Data Interface, a standard for data transmission over fiber optic cables.",
+                chinese: "FDDI：光纤分布式数据接口，通过光纤电缆传输数据的标准。"
+            },
+            {
+                term: "Fedora",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Fedora_icon_%282021%29.svg/320px-Fedora_icon_%282021%29.svg.png",
+                explanation: "A Linux distribution sponsored by Red Hat.",
+                chinese: "Fedora：由Red Hat赞助的Linux发行版。"
+            },
+            {
+                term: "ferrule",
+                explanation: "A component used in fiber optic connectors.",
+                chinese: "套圈：光纤连接器中使用的组件。"
+            },
+            {
+                term: "fiber-optic cable",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Optical-fibre.jpg/320px-Optical-fibre.jpg",
+                explanation: "A cable that uses glass or plastic threads to transmit data as light.",
+                chinese: "光纤电缆：使用玻璃或塑料线程以光的形式传输数据的电缆。"
+            },
+            {
+                term: "file rights",
+                explanation: "Permissions that determine what actions users can perform on files.",
+                chinese: "文件权限：确定用户可以对文件执行哪些操作的权限。"
+            },
+            {
+                term: "file server",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/File_Server_Linux.png/320px-File_Server_Linux.png",
+                explanation: "A server that provides shared access to files.",
+                chinese: "文件服务器：提供对文件的共享访问的服务器。"
+            },
+            {
+                term: "firewall",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Netfilter-logical-packet-flow.svg/320px-Netfilter-logical-packet-flow.svg.png",
+                explanation: "A network security system that monitors and controls incoming and outgoing network traffic.",
+                chinese: "防火墙：监视和控制传入和传出网络流量的网络安全系统。"
+            },
+            {
+                term: "fish tape",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Fish_tape.jpg/320px-Fish_tape.jpg",
+                explanation: "A tool used to pull wires through conduits.",
+                chinese: "穿线带：用于通过导管拉线的工具。"
+            },
+            {
+                term: "forest",
+                explanation: "A collection of one or more Active Directory domains.",
+                chinese: "林：一个或多个Active Directory域的集合。"
+            },
+            {
+                term: "FTP",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Internet2.jpg/320px-Internet2.jpg",
+                explanation: "File Transfer Protocol, a standard network protocol for transferring files.",
+                chinese: "FTP：文件传输协议，用于传输文件的标准网络协议。"
+            },
+            {
+                term: "full backup",
+                explanation: "A backup that copies all selected files.",
+                chinese: "完全备份：复制所有选定文件的备份。"
+            },
+            {
+                term: "gateway",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Gateway_firewall.svg/320px-Gateway_firewall.svg.png",
+                explanation: "A device that connects two different networks.",
+                chinese: "网关：连接两个不同网络的设备。"
+            },
+            {
+                term: "GB",
+                explanation: "Gigabyte, a unit of digital information storage.",
+                chinese: "GB：千兆字节，数字信息存储单位。"
+            },
+            {
+                term: "generation backup",
+                explanation: "A backup strategy that maintains multiple versions of backups.",
+                chinese: "代备份：维护多个备份版本的备份策略。"
+            },
+            {
+                term: "generation gap",
+                explanation: "A humorous term for the difference between technology generations.",
+                chinese: "代沟：对技术代之间差异的幽默称呼。"
+            },
+            {
+                term: "glass house",
+                explanation: "A term for a centralized data center.",
+                chinese: "玻璃房：对集中式数据中心的称呼。"
+            },
+            {
+                term: "GNOME",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/GNOME_Logo.svg/320px-GNOME_Logo.svg.png",
+                explanation: "A desktop environment for Linux operating systems.",
+                chinese: "GNOME：Linux操作系统的桌面环境。"
+            },
+            {
+                term: "group account",
+                explanation: "An account that represents a collection of user accounts.",
+                chinese: "组账户：代表用户账户集合的账户。"
+            },
+            {
+                term: "groupware",
+                explanation: "Software designed to help people work together collectively.",
+                chinese: "群件：旨在帮助人们集体工作的软件。"
+            },
+            {
+                term: "guest",
+                explanation: "A user account with limited permissions.",
+                chinese: "访客：权限有限的用户账户。"
+            },
+            {
+                term: "guru",
+                explanation: "An expert in a particular field.",
+                chinese: "专家：特定领域的专家。"
+            },
+            {
+                term: "hotspot",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Hotspot_icon.svg/320px-Hotspot_icon.svg.png",
+                explanation: "A physical location where people can access the Internet.",
+                chinese: "热点：人们可以访问互联网的物理位置。"
+            },
+            {
+                term: "html",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/HTML5_logo_and_wordmark.svg/320px-HTML5_logo_and_wordmark.svg.png",
+                explanation: "HyperText Markup Language, the standard markup language for web pages.",
+                chinese: "html：超文本标记语言，网页的标准标记语言。"
+            },
+            {
+                term: "http",
+                explanation: "Hypertext Transfer Protocol, the foundation of data communication for the World Wide Web.",
+                chinese: "http：超文本传输协议，万维网数据通信的基础。"
+            },
+            {
+                term: "https",
+                explanation: "Hypertext Transfer Protocol Secure, a secure version of HTTP.",
+                chinese: "https：超文本传输安全协议，HTTP的安全版本。"
+            },
+            {
+                term: "hub",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/4_port_netgear_ethernet_hub.jpg/320px-4_port_netgear_ethernet_hub.jpg",
+                explanation: "A network device that connects multiple devices together.",
+                chinese: "集线器：将多个设备连接在一起的网络设备。"
+            },
+            {
+                term: "I/O port address",
+                explanation: "A memory address used to communicate with input/output devices.",
+                chinese: "I/O端口地址：用于与输入/输出设备通信的内存地址。"
+            },
+            {
+                term: "IACI",
+                explanation: "International Association of Computer Investigators.",
+                chinese: "IACI：国际计算机调查员协会。"
+            },
+            {
+                term: "IDE",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/IDE_connector.jpg/320px-IDE_connector.jpg",
+                explanation: "Integrated Drive Electronics, a standard interface for storage devices.",
+                chinese: "IDE：集成驱动器电子设备，存储设备的标准接口。"
+            },
+            {
+                term: "IEEE",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/IEEE_logo.svg/320px-IEEE_logo.svg.png",
+                explanation: "Institute of Electrical and Electronics Engineers, a professional organization.",
+                chinese: "IEEE：电气和电子工程师协会，一个专业组织。"
+            },
+            {
+                term: "incremental backup",
+                explanation: "A backup that copies only files changed since the last backup.",
+                chinese: "增量备份：仅复制自上次备份以来更改的文件的备份。"
+            },
+            {
+                term: "inkjet printer",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Inkjet_printer.jpg/320px-Inkjet_printer.jpg",
+                explanation: "A type of printer that creates images by propelling droplets of ink onto paper.",
+                chinese: "喷墨打印机：通过将墨滴喷射到纸上来创建图像的打印机类型。"
+            },
+            {
+                term: "Internet",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Internet_map_1024.jpg/320px-Internet_map_1024.jpg",
+                explanation: "The global system of interconnected computer networks.",
+                chinese: "互联网：互连计算机网络的全球系统。"
+            },
+            {
+                term: "Internet Explorer",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Internet_Explorer_9_icon.svg/320px-Internet_Explorer_9_icon.svg.png",
+                explanation: "A web browser developed by Microsoft.",
+                chinese: "Internet Explorer：微软开发的网页浏览器。"
+            },
+            {
+                term: "interoperability",
+                explanation: "The ability of different systems to work together.",
+                chinese: "互操作性：不同系统协同工作的能力。"
+            },
+            {
+                term: "intranet",
+                explanation: "A private network within an organization.",
+                chinese: "内联网：组织内的专用网络。"
+            },
+            {
+                term: "intranetWare",
+                explanation: "A Novell product that combined NetWare with Internet services.",
+                chinese: "intranetWare：将NetWare与Internet服务结合的Novell产品。"
+            },
+            {
+                term: "IP address",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/IP_address_icon_%28Noun_Project%29.svg/320px-IP_address_icon_%28Noun_Project%29.svg.png",
+                explanation: "A numerical label assigned to each device connected to a computer network.",
+                chinese: "IP地址：分配给连接到计算机网络的每个设备的数字标签。"
+            },
+            {
+                term: "IPX",
+                explanation: "Internetwork Packet Exchange, a networking protocol from Novell.",
+                chinese: "IPX：网间数据包交换，Novell的网络协议。"
+            },
+            {
+                term: "IPX.COM",
+                explanation: "A Novell NetWare file containing the IPX protocol stack.",
+                chinese: "IPX.COM：包含IPX协议栈的Novell NetWare文件。"
+            },
+            {
+                term: "IRQ",
+                explanation: "Interrupt Request, a signal sent to the processor to request attention.",
+                chinese: "IRQ：中断请求，发送给处理器以请求关注的信号。"
+            },
+            {
+                term: "ISA bus",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/ISA_Slots.jpg/320px-ISA_Slots.jpg",
+                explanation: "Industry Standard Architecture, a computer bus standard.",
+                chinese: "ISA总线：工业标准架构，计算机总线标准。"
+            },
+            {
+                term: "ISDN",
+                explanation: "Integrated Services Digital Network, a set of communication standards.",
+                chinese: "ISDN：综合业务数字网，一组通信标准。"
+            },
+            {
+                term: "ISO",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/ISO_Logo_%28Red_square%29.svg/320px-ISO_Logo_%28Red_square%29.svg.png",
+                explanation: "International Organization for Standardization, an international standard-setting body.",
+                chinese: "ISO：国际标准化组织，国际标准制定机构。"
+            },
+            {
+                term: "ISP",
+                explanation: "Internet Service Provider, a company that provides Internet access.",
+                chinese: "ISP：互联网服务提供商，提供互联网访问的公司。"
+            },
+            {
+                term: "Java",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/3/30/Java_programming_language_logo.svg/320px-Java_programming_language_logo.svg.png",
+                explanation: "A programming language and computing platform.",
+                chinese: "Java：编程语言和计算平台。"
+            },
+            {
+                term: "JavaScript",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Unofficial_JavaScript_logo_2.svg/320px-Unofficial_JavaScript_logo_2.svg.png",
+                explanation: "A programming language commonly used in web development.",
+                chinese: "JavaScript：网页开发中常用的编程语言。"
+            },
+            {
+                term: "jumper block",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Jumper_on_2-pin_header.jpg/320px-Jumper_on_2-pin_header.jpg",
+                explanation: "A small connector used to configure hardware settings.",
+                chinese: "跳线块：用于配置硬件设置的小型连接器。"
+            },
+            {
+                term: "K",
+                explanation: "Kilobyte, a unit of digital information storage.",
+                chinese: "K：千字节，数字信息存储单位。"
+            },
+            {
+                term: "Kerberos",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Kerberos_icon.svg/320px-Kerberos_icon.svg.png",
+                explanation: "A network authentication protocol.",
+                chinese: "Kerberos：网络身份验证协议。"
+            },
+            {
+                term: "LAN",
+                explanation: "Local Area Network, a network that connects computers in a limited area.",
+                chinese: "LAN：局域网，在有限区域内连接计算机的网络。"
+            },
+            {
+                term: "LANcache",
+                explanation: "A Novell NetWare feature that caches frequently accessed data.",
+                chinese: "LANcache：Novell NetWare功能，缓存经常访问的数据。"
+            },
+            {
+                term: "LAN Manager",
+                explanation: "A network operating system from Microsoft.",
+                chinese: "LAN Manager：微软的网络操作系统。"
+            },
+            {
+                term: "LAN Server",
+                explanation: "IBM's LAN server product.",
+                chinese: "LAN Server：IBM的LAN服务器产品。"
+            },
+            {
+                term: "LANtastic",
+                explanation: "A peer-to-peer network operating system from Artisoft.",
+                chinese: "LANtastic：Artisoft的点对点网络操作系统。"
+            },
+            {
+                term: "laser printer",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Laser_printer.png/320px-Laser_printer.png",
+                explanation: "A printer that uses a laser beam to produce an image on a drum.",
+                chinese: "激光打印机：使用激光束在鼓上产生图像的打印机。"
+            },
+            {
+                term: "lemon-pudding layer",
+                explanation: "A humorous term for a layer in a network model that doesn't do much.",
+                chinese: "柠檬布丁层：对网络模型中不做太多事情的层的幽默称呼。"
+            },
+            {
+                term: "Linux",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Tux.svg/320px-Tux.svg.png",
+                explanation: "An open-source Unix-like operating system.",
+                chinese: "Linux：开源的类Unix操作系统。"
+            },
+            {
+                term: "LLC sublayer",
+                explanation: "Logical Link Control sublayer, part of the data link layer in the OSI model.",
+                chinese: "LLC子层：逻辑链路控制子层，OSI模型中数据链路层的一部分。"
+            },
+            {
+                term: "local area network",
+                explanation: "A network that connects computers in a limited geographical area.",
+                chinese: "局域网：在有限地理区域内连接计算机的网络。"
+            },
+            {
+                term: "local resources",
+                explanation: "Resources available on the local computer.",
+                chinese: "本地资源：本地计算机上可用的资源。"
+            },
+            {
+                term: "LocalTalk",
+                explanation: "A networking system developed by Apple for Macintosh computers.",
+                chinese: "LocalTalk：苹果为Macintosh计算机开发的网络系统。"
+            },
+            {
+                term: "log in",
+                explanation: "The process of gaining access to a computer system.",
+                chinese: "登录：获得对计算机系统访问权限的过程。"
+            },
+            {
+                term: "LOGIN",
+                explanation: "A command or process to access a system.",
+                chinese: "LOGIN：访问系统的命令或过程。"
+            },
+            {
+                term: "LOGIN directory",
+                explanation: "A directory in NetWare that contains login scripts.",
+                chinese: "LOGIN目录：NetWare中包含登录脚本的目录。"
+            },
+            {
+                term: "log on",
+                explanation: "To begin a session with a computer system.",
+                chinese: "登录：开始与计算机系统的会话。"
+            },
+            {
+                term: "logon name",
+                explanation: "The name used to identify a user during login.",
+                chinese: "登录名：在登录期间用于识别用户的名称。"
+            },
+            {
+                term: "logon script",
+                explanation: "A script that runs when a user logs into a system.",
+                chinese: "登录脚本：用户登录系统时运行的脚本。"
+            },
+            {
+                term: "log out",
+                explanation: "To end a session with a computer system.",
+                chinese: "注销：结束与计算机系统的会话。"
+            },
+            {
+                term: "LOGOUT",
+                explanation: "A command to end a session with a system.",
+                chinese: "LOGOUT：结束与系统会话的命令。"
+            },
+            {
+                term: "LPT1",
+                explanation: "Line Printer 1, a parallel port on a computer.",
+                chinese: "LPT1：行式打印机1，计算机上的并行端口。"
+            },
+            {
+                term: "Macintosh",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Macintosh_classic.jpg/320px-Macintosh_classic.jpg",
+                explanation: "A line of personal computers designed and marketed by Apple.",
+                chinese: "Macintosh：由苹果设计和销售的个人计算机系列。"
+            },
+            {
+                term: "Mac OS X",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/MacOS_wordmark_%282017%29.svg/320px-MacOS_wordmark_%282017%29.svg.png",
+                explanation: "The operating system for Apple's Macintosh computers.",
+                chinese: "Mac OS X：苹果Macintosh计算机的操作系统。"
+            },
+            {
+                term: "MAC sublayer",
+                explanation: "Media Access Control sublayer, part of the data link layer in the OSI model.",
+                chinese: "MAC子层：媒体访问控制子层，OSI模型中数据链路层的一部分。"
+            },
+            {
+                term: "mail server",
+                explanation: "A server that handles and delivers email.",
+                chinese: "邮件服务器：处理和传递电子邮件的服务器。"
+            },
+            {
+                term: "mainframe",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/IBM_System_z10_Enterprise_Class.jpg/320px-IBM_System_z10_Enterprise_Class.jpg",
+                explanation: "A large, powerful computer used by organizations for critical applications.",
+                chinese: "大型机：组织用于关键应用程序的大型强大计算机。"
+            },
+            {
+                term: "mapping",
+                explanation: "The process of assigning a drive letter to a network resource.",
+                chinese: "映射：将驱动器号分配给网络资源的过程。"
+            },
+            {
+                term: "MB",
+                explanation: "Megabyte, a unit of digital information storage.",
+                chinese: "MB：兆字节，数字信息存储单位。"
+            },
+            {
+                term: "memory",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Memory_module_DDRAM_20-03-2006.jpg/320px-Memory_module_DDRAM_20-03-2006.jpg",
+                explanation: "Computer components that store data for processing.",
+                chinese: "内存：存储数据以供处理的计算机组件。"
+            },
+            {
+                term: "metaphor",
+                explanation: "A figure of speech used to describe something in terms of something else.",
+                chinese: "隐喻：用其他事物描述某事物的修辞手法。"
+            },
+            {
+                term: "MMC",
+                explanation: "Microsoft Management Console, a framework for administrative tools.",
+                chinese: "MMC：微软管理控制台，管理工具的框架。"
+            },
+            {
+                term: "modem",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Modem_icon.png/320px-Modem_icon.png",
+                explanation: "A device that modulates and demodulates signals for communication over telephone lines.",
+                chinese: "调制解调器：调制和解调信号以便通过电话线通信的设备。"
+            },
+            {
+                term: "mouse",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Microsoft_intellimouse_2017.jpg/320px-Microsoft_intellimouse_2017.jpg",
+                explanation: "A pointing device that detects two-dimensional motion relative to a surface.",
+                chinese: "鼠标：检测相对于表面的二维运动的指向设备。"
+            },
+            {
+                term: "Mr.McFeeley",
+                explanation: "A code name for an early Microsoft networking product.",
+                chinese: "Mr.McFeeley：早期微软网络产品的代号。"
+            },
+            {
+                term: "multiboot",
+                explanation: "A configuration where multiple operating systems can be booted on a single computer.",
+                chinese: "多重启动：可以在单台计算机上启动多个操作系统的配置。"
+            },
+            {
+                term: "My Network Places",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Network_Neighborhood_icon.png/320px-Network_Neighborhood_icon.png",
+                explanation: "A feature in Windows that provides access to network resources.",
+                chinese: "我的网络位置：Windows中提供对网络资源访问的功能。"
+            },
+            {
+                term: ".NET",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Microsoft_.NET_logo.svg/320px-Microsoft_.NET_logo.svg.png",
+                explanation: "A software framework developed by Microsoft.",
+                chinese: ".NET：微软开发的软件框架。"
+            },
+            {
+                term: "NETBIOS",
+                explanation: "Network Basic Input/Output System, a program that allows applications on different computers to communicate.",
+                chinese: "NETBIOS：网络基本输入/输出系统，允许不同计算机上的应用程序进行通信的程序。"
+            },
+            {
+                term: "Netscape",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Netscape_icon.png/320px-Netscape_icon.png",
+                explanation: "A web browser that was popular in the 1990s.",
+                chinese: "Netscape：1990年代流行的网页浏览器。"
+            },
+            {
+                term: "Netware",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Novell_Netware_logo.png/320px-Novell_Netware_logo.png",
+                explanation: "A network operating system developed by Novell.",
+                chinese: "Netware：Novell开发的网络操作系统。"
+            },
+            {
+                term: "NetWare Directory Services",
+                explanation: "A directory service for NetWare networks.",
+                chinese: "NetWare目录服务：NetWare网络的目录服务。"
+            },
+            {
+                term: "NetWare Loadable Module",
+                explanation: "A module that can be loaded into a NetWare server to add functionality.",
+                chinese: "NetWare可加载模块：可以加载到NetWare服务器中以添加功能的模块。"
+            },
+            {
+                term: "network",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Networking.svg/320px-Networking.svg.png",
+                explanation: "A collection of computers and devices connected together.",
+                chinese: "网络：连接在一起的计算机和设备的集合。"
+            },
+            {
+                term: "network drive",
+                explanation: "A storage device on a network that can be accessed by multiple users.",
+                chinese: "网络驱动器：网络上可由多个用户访问的存储设备。"
+            },
+            {
+                term: "network interface card",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Network_card.jpg/320px-Network_card.jpg",
+                explanation: "A hardware component that connects a computer to a network.",
+                chinese: "网络接口卡：将计算机连接到网络的硬件组件。"
+            },
+            {
+                term: "network layer",
+                explanation: "The third layer of the OSI model, responsible for packet forwarding.",
+                chinese: "网络层：OSI模型的第三层，负责数据包转发。"
+            },
+            {
+                term: "network manager",
+                explanation: "A person responsible for managing a computer network.",
+                chinese: "网络管理员：负责管理计算机网络的人员。"
+            },
+            {
+                term: "Network Neighborhood",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Network_Neighborhood_icon.png/320px-Network_Neighborhood_icon.png",
+                explanation: "A feature in older versions of Windows for browsing network resources.",
+                chinese: "网上邻居：旧版Windows中用于浏览网络资源的功能。"
+            },
+            {
+                term: "network operating system",
+                explanation: "An operating system designed to support network operations.",
+                chinese: "网络操作系统：设计用于支持网络操作的操作系统。"
+            },
+            {
+                term: "network resource",
+                explanation: "Any device, service, or data available on a network.",
+                chinese: "网络资源：网络上可用的任何设备、服务或数据。"
+            },
+            {
+                term: "newsgroup",
+                explanation: "An online discussion forum where users can post messages.",
+                chinese: "新闻组：用户可以发布消息的在线讨论论坛。"
+            },
+            {
+                term: "NIC",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Network_card.jpg/320px-Network_card.jpg",
+                explanation: "Network Interface Card, a hardware component that connects a computer to a network.",
+                chinese: "NIC：网络接口卡，将计算机连接到网络的硬件组件。"
+            },
+            {
+                term: "NLM",
+                explanation: "NetWare Loadable Module, a module that can be loaded into a NetWare server.",
+                chinese: "NLM：NetWare可加载模块，可以加载到NetWare服务器中的模块。"
+            },
+            {
+                term: "node",
+                explanation: "Any device connected to a network.",
+                chinese: "节点：连接到网络的任何设备。"
+            },
+            {
+                term: "NOS",
+                explanation: "Network Operating System, an operating system designed for network operations.",
+                chinese: "NOS：网络操作系统，为网络操作设计的操作系统。"
+            },
+            {
+                term: "Novell",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Novell_Netware_logo.png/320px-Novell_Netware_logo.png",
+                explanation: "A company that developed network software, including NetWare.",
+                chinese: "Novell：开发网络软件（包括NetWare）的公司。"
+            },
+            {
+                term: "NTFS",
+                explanation: "New Technology File System, a file system developed by Microsoft.",
+                chinese: "NTFS：新技术文件系统，微软开发的文件系统。"
+            },
+            {
+                term: "obfuscation",
+                explanation: "The practice of making something difficult to understand.",
+                chinese: "混淆：使某事物难以理解的做法。"
+            },
+            {
+                term: "octet",
+                explanation: "A unit of digital information consisting of 8 bits.",
+                chinese: "八位组：由8位组成的数字信息单位。"
+            },
+            {
+                term: "offline",
+                explanation: "Not connected to a network or the Internet.",
+                chinese: "离线：未连接到网络或互联网。"
+            },
+            {
+                term: "online",
+                explanation: "Connected to a network or the Internet.",
+                chinese: "在线：连接到网络或互联网。"
+            },
+            {
+                term: "operator",
+                explanation: "A user with special permissions to manage network operations.",
+                chinese: "操作员：具有管理网络操作特殊权限的用户。"
+            },
+            {
+                term: "organizational unit",
+                explanation: "A container in a directory service for organizing objects.",
+                chinese: "组织单位：目录服务中用于组织对象的容器。"
+            },
+            {
+                term: "OSI",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/OSI_Model_v1.svg/320px-OSI_Model_v1.svg.png",
+                explanation: "Open Systems Interconnection, a reference model for network communication.",
+                chinese: "OSI：开放系统互连，网络通信的参考模型。"
+            },
+            {
+                term: "Outlook",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Microsoft_Office_Outlook_%282018%E2%80%93present%29.svg/320px-Microsoft_Office_Outlook_%282018%E2%80%93present%29.svg.png",
+                explanation: "A personal information manager from Microsoft.",
+                chinese: "Outlook：微软的个人信息管理器。"
+            },
+            {
+                term: "package filter",
+                explanation: "A type of firewall that filters network traffic based on packets.",
+                chinese: "数据包过滤器：基于数据包过滤网络流量的防火墙类型。"
+            },
+            {
+                term: "packet sniffer",
+                explanation: "A tool that captures and analyzes network traffic.",
+                chinese: "数据包嗅探器：捕获和分析网络流量的工具。"
+            },
+            {
+                term: "packets",
+                explanation: "Units of data transmitted over a network.",
+                chinese: "数据包：通过网络传输的数据单元。"
+            },
+            {
+                term: "parallel port",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/IEEE_1284_Parallel_port.jpg/320px-IEEE_1285_Parallel_port.jpg",
+                explanation: "An interface for connecting peripherals, such as printers.",
+                chinese: "并行端口：用于连接外围设备（如打印机）的接口。"
+            },
+            {
+                term: "partition",
+                explanation: "A division of a hard disk into separate sections.",
+                chinese: "分区：将硬盘划分为单独的部分。"
+            },
+            {
+                term: "password",
+                explanation: "A secret word or phrase used to authenticate a user.",
+                chinese: "密码：用于验证用户的秘密单词或短语。"
+            },
+            {
+                term: "patch cable",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Crossover_cable.jpg/320px-Crossover_cable.jpg",
+                explanation: "A cable used to connect network devices.",
+                chinese: "跳线电缆：用于连接网络设备的电缆。"
+            },
+            {
+                term: "PCI",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/PCI-Slots.jpg/320px-PCI-Slots.jpg",
+                explanation: "Peripheral Component Interconnect, a local computer bus.",
+                chinese: "PCI：外围组件互连，本地计算机总线。"
+            },
+            {
+                term: "PCONSOLE",
+                explanation: "A NetWare utility for managing print queues.",
+                chinese: "PCONSOLE：用于管理打印队列的NetWare实用程序。"
+            },
+            {
+                term: "PDC",
+                explanation: "Primary Domain Controller, the main server in a Windows NT domain.",
+                chinese: "PDC：主域控制器，Windows NT域中的主服务器。"
+            },
+            {
+                term: "peer-to-peer network",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/P2P_network.svg/320px-P2P_network.svg.png",
+                explanation: "A network where computers communicate directly without a central server.",
+                chinese: "点对点网络：计算机在没有中央服务器的情况下直接通信的网络。"
+            },
+            {
+                term: "permissions",
+                explanation: "Rules that determine what actions users can perform.",
+                chinese: "权限：确定用户可以执行哪些操作的规则。"
+            },
+            {
+                term: "physical layer",
+                explanation: "The first layer of the OSI model, dealing with physical connections.",
+                chinese: "物理层：OSI模型的第一层，处理物理连接。"
+            },
+            {
+                term: "ping",
+                explanation: "A utility used to test connectivity between network devices.",
+                chinese: "ping：用于测试网络设备之间连接性的实用程序。"
+            },
+            {
+                term: "plenum cable",
+                explanation: "A type of cable with fire-resistant insulation for use in plenum spaces.",
+                chinese: "通风电缆：具有耐火绝缘的电缆类型，用于通风空间。"
+            },
+            {
+                term: "pocket protector",
+                explanation: "A sheath worn in a shirt pocket to protect it from pens and pencils.",
+                chinese: "口袋保护套：穿在衬衫口袋中以保护其免受钢笔和铅笔伤害的护套。"
+            },
+            {
+                term: "port",
+                explanation: "A logical construct that identifies a specific process or service.",
+                chinese: "端口：标识特定进程或服务的逻辑构造。"
+            },
+            {
+                term: "PPP",
+                explanation: "Point-to-Point Protocol, a data link protocol for direct connections.",
+                chinese: "PPP：点对点协议，用于直接连接的数据链路协议。"
+            },
+            {
+                term: "presentation layer",
+                explanation: "The sixth layer of the OSI model, responsible for data formatting.",
+                chinese: "表示层：OSI模型的第六层，负责数据格式化。"
+            },
+            {
+                term: "print job",
+                explanation: "A request to print a document.",
+                chinese: "打印作业：打印文档的请求。"
+            },
+            {
+                term: "Print Manager",
+                explanation: "A Windows utility for managing print jobs.",
+                chinese: "打印管理器：用于管理打印作业的Windows实用程序。"
+            },
+            {
+                term: "print queue",
+                explanation: "A list of print jobs waiting to be printed.",
+                chinese: "打印队列：等待打印的打印作业列表。"
+            },
+            {
+                term: "print server",
+                explanation: "A server that manages print jobs for network printers.",
+                chinese: "打印服务器：管理网络打印机打印作业的服务器。"
+            },
+            {
+                term: "PRN",
+                explanation: "A device name for a printer in DOS and Windows.",
+                chinese: "PRN：DOS和Windows中打印器的设备名称。"
+            },
+            {
+                term: "protocol",
+                explanation: "A set of rules for communication between devices.",
+                chinese: "协议：设备之间通信的一组规则。"
+            },
+            {
+                term: "protocol analyzer",
+                explanation: "A tool for capturing and analyzing network traffic.",
+                chinese: "协议分析器：捕获和分析网络流量的工具。"
+            },
+            {
+                term: "punch-down block",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Punchdown_Block.jpg/320px-Punchdown_Block.jpg",
+                explanation: "A device used to connect telephone or network wires.",
+                chinese: "打线板：用于连接电话或网络线的设备。"
+            },
+            {
+                term: "QIC",
+                explanation: "Quarter-Inch Cartridge, a magnetic tape data storage format.",
+                chinese: "QIC：四分之一英寸盒式磁带，一种磁带数据存储格式。"
+            },
+            {
+                term: "queue",
+                explanation: "A list of items waiting to be processed.",
+                chinese: "队列：等待处理的项列表。"
+            },
+            {
+                term: "RAID",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/RAID_0.svg/320px-RAID_0.svg.png",
+                explanation: "Redundant Array of Independent Disks, a data storage technology.",
+                chinese: "RAID：独立磁盘冗余阵列，一种数据存储技术。"
+            },
+            {
+                term: "RAM",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Memory_module_DDRAM_20-03-2006.jpg/320px-Memory_module_DDRAM_20-03-2006.jpg",
+                explanation: "Random Access Memory, a type of computer memory.",
+                chinese: "RAM：随机存取存储器，一种计算机内存。"
+            },
+            {
+                term: "redirection",
+                explanation: "The process of sending output to a different destination.",
+                chinese: "重定向：将输出发送到不同目的地的过程。"
+            },
+            {
+                term: "registry",
+                explanation: "A database in Windows that stores configuration settings.",
+                chinese: "注册表：Windows中存储配置设置的数据库。"
+            },
+            {
+                term: "Remote Desktop Connection",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Remote_Desktop_Connection_7.png/320px-Remote_Desktop_Connection_7.png",
+                explanation: "A Windows feature that allows remote access to a computer.",
+                chinese: "远程桌面连接：允许远程访问计算机的Windows功能。"
+            },
+            {
+                term: "Remote Installation Service",
+                explanation: "A Windows service for remote operating system installation.",
+                chinese: "远程安装服务：用于远程操作系统安装的Windows服务。"
+            },
+            {
+                term: "repeater",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Repeater_symbol.svg/320px-Repeater_symbol.svg.png",
+                explanation: "A device that amplifies or regenerates signals.",
+                chinese: "中继器：放大或再生信号的设备。"
+            },
+            {
+                term: "resource",
+                explanation: "Any component that can be used on a network.",
+                chinese: "资源：可以在网络上使用的任何组件。"
+            },
+            {
+                term: "ring",
+                explanation: "A network topology where devices are connected in a circular fashion.",
+                chinese: "环：设备以环形方式连接的网络拓扑。"
+            },
+            {
+                term: "RIS",
+                explanation: "Remote Installation Service, a Windows service for remote OS installation.",
+                chinese: "RIS：远程安装服务，用于远程操作系统安装的Windows服务。"
+            },
+            {
+                term: "RJ-45",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/RJ-45_connector.jpg/320px-RJ-45_connector.jpg",
+                explanation: "A standard connector for Ethernet networks.",
+                chinese: "RJ-45：以太网网络的标准连接器。"
+            },
+            {
+                term: "root",
+                explanation: "The top-level directory in a file system.",
+                chinese: "根：文件系统中的顶级目录。"
+            },
+            {
+                term: "root server",
+                explanation: "A DNS server that serves the root zone of the Domain Name System.",
+                chinese: "根服务器：为域名系统的根区域提供服务的DNS服务器。"
+            },
+            {
+                term: "router",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Router_icon.svg/320px-Router_icon.svg.png",
+                explanation: "A device that forwards data packets between computer networks.",
+                chinese: "路由器：在计算机网络之间转发数据包的设备。"
+            },
+            {
+                term: "Samba",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Samba_logo.svg/320px-Samba_logo.svg.png",
+                explanation: "An open-source implementation of the SMB/CIFS networking protocol.",
+                chinese: "Samba：SMB/CIFS网络协议的开源实现。"
+            },
+            {
+                term: "ScanDisk",
+                explanation: "A utility in Windows for checking and repairing disk errors.",
+                chinese: "ScanDisk：Windows中用于检查和修复磁盘错误的实用程序。"
+            },
+            {
+                term: "scheduling software",
+                explanation: "Software that helps manage appointments and tasks.",
+                chinese: "调度软件：帮助管理约会和任务的软件。"
+            },
+            {
+                term: "scope",
+                explanation: "The range of IP addresses that a DHCP server can assign.",
+                chinese: "作用域：DHCP服务器可以分配的IP地址范围。"
+            },
+            {
+                term: "SCSI",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/SCSI_symbol.svg/320px-SCSI_symbol.svg.png",
+                explanation: "Small Computer System Interface, a set of standards for connecting peripherals.",
+                chinese: "SCSI：小型计算机系统接口，用于连接外围设备的一组标准。"
+            },
+            {
+                term: "segment",
+                explanation: "A section of a network.",
+                chinese: "网段：网络的一部分。"
+            },
+            {
+                term: "sendmail",
+                explanation: "A mail transfer agent for Unix-like systems.",
+                chinese: "sendmail：类Unix系统的邮件传输代理。"
+            },
+            {
+                term: "serial port",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/RS-232_9_pin_connector.jpg/320px-RS-232_9_pin_connector.jpg",
+                explanation: "A communication interface that transmits data one bit at a time.",
+                chinese: "串行端口：一次传输一位数据的通信接口。"
+            },
+            {
+                term: "server",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Server_icon.svg/320px-Server_icon.svg.png",
+                explanation: "A computer or system that provides resources or services.",
+                chinese: "服务器：提供资源或服务的计算机或系统。"
+            },
+            {
+                term: "service pack",
+                explanation: "A collection of updates and fixes for a software product.",
+                chinese: "服务包：软件产品的更新和修复集合。"
+            },
+            {
+                term: "session layer",
+                explanation: "The fifth layer of the OSI model, responsible for managing sessions.",
+                chinese: "会话层：OSI模型的第五层，负责管理会话。"
+            },
+            {
+                term: "SFT",
+                explanation: "System Fault Tolerance, features that protect against system failures.",
+                chinese: "SFT：系统容错，防止系统故障的功能。"
+            },
+            {
+                term: "share name",
+                explanation: "The name given to a shared resource on a network.",
+                chinese: "共享名：网络上共享资源的名称。"
+            },
+            {
+                term: "shared folder",
+                explanation: "A folder that is accessible to multiple users on a network.",
+                chinese: "共享文件夹：网络上多个用户可以访问的文件夹。"
+            },
+            {
+                term: "shared resource",
+                explanation: "Any resource that can be accessed by multiple users on a network.",
+                chinese: "共享资源：网络上多个用户可以访问的任何资源。"
+            },
+            {
+                term: "shielded twisted pair",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Shielded_Twisted_Pair.jpg/320px-Shielded_Twisted_Pair.jpg",
+                explanation: "A type of cable with shielding to reduce electromagnetic interference.",
+                chinese: "屏蔽双绞线：具有屏蔽以减少电磁干扰的电缆类型。"
+            },
+            {
+                term: "SMB",
+                explanation: "Server Message Block, a protocol for sharing files and printers.",
+                chinese: "SMB：服务器消息块，用于共享文件和打印机的协议。"
+            },
+            {
+                term: "smiley",
+                explanation: "An emoticon representing a smiling face.",
+                chinese: "笑脸：代表笑脸的表情符号。"
+            },
+            {
+                term: "SNA",
+                explanation: "Systems Network Architecture, IBM's proprietary networking architecture.",
+                chinese: "SNA：系统网络架构，IBM的专有网络架构。"
+            },
+            {
+                term: "sneakernet",
+                explanation: "A humorous term for transferring data by carrying storage media.",
+                chinese: "运动鞋网络：通过携带存储介质传输数据的幽默术语。"
+            },
+            {
+                term: "SNMP",
+                explanation: "Simple Network Management Protocol, a protocol for managing network devices.",
+                chinese: "SNMP：简单网络管理协议，用于管理网络设备的协议。"
+            },
+            {
+                term: "spooling",
+                explanation: "Simultaneous Peripheral Operations Online, a technique for managing print jobs.",
+                chinese: "假脱机：同时外围操作在线，管理打印作业的技术。"
+            },
+            {
+                term: "SSID",
+                explanation: "Service Set Identifier, the name of a wireless network.",
+                chinese: "SSID：服务集标识符，无线网络的名称。"
+            },
+            {
+                term: "star",
+                explanation: "A network topology where all devices connect to a central hub.",
+                chinese: "星型：所有设备都连接到中央集线器的网络拓扑。"
+            },
+            {
+                term: "Stateful Packet Inspection",
+                explanation: "A firewall technology that tracks the state of network connections.",
+                chinese: "状态数据包检查：跟踪网络连接状态的防火墙技术。"
+            },
+            {
+                term: "subnet mask",
+                explanation: "A value used to divide an IP address into network and host portions.",
+                chinese: "子网掩码：用于将IP地址划分为网络和主机部分的值。"
+            },
+            {
+                term: "subnetting",
+                explanation: "The process of dividing a network into smaller subnetworks.",
+                chinese: "子网划分：将网络划分为较小子网的过程。"
+            },
+            {
+                term: "SUPERVISOR",
+                explanation: "The default administrator account in NetWare.",
+                chinese: "SUPERVISOR：NetWare中的默认管理员账户。"
+            },
+            {
+                term: "switch",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/RJ-45_switch.jpg/320px-RJ-45_switch.jpg",
+                explanation: "A network device that connects devices and forwards data to specific destinations.",
+                chinese: "交换机：连接设备并将数据转发到特定目的地的网络设备。"
+            },
+            {
+                term: "SYS",
+                explanation: "A system volume in NetWare.",
+                chinese: "SYS：NetWare中的系统卷。"
+            },
+            {
+                term: "system fault tolerance",
+                explanation: "Features that protect a system from failures.",
+                chinese: "系统容错：保护系统免受故障的功能。"
+            },
+            {
+                term: "tape drive",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Tapedrive-full.jpg/320px-Tapedrive-full.jpg",
+                explanation: "A device that reads and writes data on magnetic tape.",
+                chinese: "磁带驱动器：在磁带上读取和写入数据的设备。"
+            },
+            {
+                term: "task",
+                explanation: "A program or process running on a computer.",
+                chinese: "任务：在计算机上运行的程序或进程。"
+            },
+            {
+                term: "TB",
+                explanation: "Terabyte, a unit of digital information storage.",
+                chinese: "TB：太字节，数字信息存储单位。"
+            },
+            {
+                term: "TCP/IP",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/UDP_encapsulation.svg/320px-UDP_encapsulation.svg.png",
+                explanation: "Transmission Control Protocol/Internet Protocol, the fundamental communication protocol of the Internet.",
+                chinese: "TCP/IP：传输控制协议/互联网协议，互联网的基本通信协议。"
+            },
+            {
+                term: "terminator",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/BNC_terminator.jpg/320px-BNC_terminator.jpg",
+                explanation: "A device used to absorb signals at the end of a cable to prevent reflection.",
+                chinese: "终结器：用于在电缆末端吸收信号以防止反射的设备。"
+            },
+            {
+                term: "thinnet",
+                explanation: "A nickname for 10Base2 Ethernet.",
+                chinese: "细缆网：10Base2以太网的昵称。"
+            },
+            {
+                term: "three-letter acronym",
+                explanation: "An acronym consisting of three letters.",
+                chinese: "三字母首字母缩略词：由三个字母组成的首字母缩略词。"
+            },
+            {
+                term: "time sharing",
+                explanation: "A computing technique where multiple users share system resources.",
+                chinese: "分时：多个用户共享系统资源的计算技术。"
+            },
+            {
+                term: "time-out",
+                explanation: "A condition that occurs when a process takes too long to complete.",
+                chinese: "超时：进程花费太长时间完成时发生的情况。"
+            },
+            {
+                term: "TLA",
+                explanation: "Three-Letter Acronym, an acronym consisting of three letters.",
+                chinese: "TLA：三字母首字母缩略词，由三个字母组成的首字母缩略词。"
+            },
+            {
+                term: "token",
+                explanation: "A special frame passed between devices in a token ring network.",
+                chinese: "令牌：在令牌环网络中设备之间传递的特殊帧。"
+            },
+            {
+                term: "Token Ring",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Token_ring_network_topology.svg/320px-Token_ring_network_topology.svg.png",
+                explanation: "A network technology where devices are connected in a ring and pass a token.",
+                chinese: "令牌环：设备以环形连接并传递令牌的网络技术。"
+            },
+            {
+                term: "top-level domain",
+                explanation: "The highest level in the Domain Name System hierarchy.",
+                chinese: "顶级域：域名系统层次结构中的最高级别。"
+            },
+            {
+                term: "topology",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/NetworkTopology-Ring.png/320px-NetworkTopology-Ring.png",
+                explanation: "The arrangement of elements in a network.",
+                chinese: "拓扑：网络中元素的排列。"
+            },
+            {
+                term: "transceiver",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/SFP_transceiver.jpg/320px-SFP_transceiver.jpg",
+                explanation: "A device that both transmits and receives signals.",
+                chinese: "收发器：既发送又接收信号的设备。"
+            },
+            {
+                term: "transport layer",
+                explanation: "The fourth layer of the OSI model, responsible for end-to-end communication.",
+                chinese: "传输层：OSI模型的第四层，负责端到端通信。"
+            },
+            {
+                term: "Travan",
+                explanation: "A magnetic tape data storage technology.",
+                chinese: "Travan：一种磁带数据存储技术。"
+            },
+            {
+                term: "Trojan horse",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Trojan_horse_%28computing%29.svg/320px-Trojan_horse_%28computing%29.svg.png",
+                explanation: "Malicious software disguised as legitimate software.",
+                chinese: "特洛伊木马：伪装成合法软件的恶意软件。"
+            },
+            {
+                term: "trust",
+                explanation: "A relationship between domains that allows authentication to be shared.",
+                chinese: "信任：域之间的关系，允许共享身份验证。"
+            },
+            {
+                term: "trustee rights",
+                explanation: "Permissions granted to users in NetWare.",
+                chinese: "受托人权限：在NetWare中授予用户的权限。"
+            },
+            {
+                term: "twisted pair",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Shielded_Twisted_Pair.jpg/320px-Shielded_Twisted_Pair.jpg",
+                explanation: "A type of cable where pairs of wires are twisted together.",
+                chinese: "双绞线：线对绞合在一起的电缆类型。"
+            },
+            {
+                term: "uninterruptible power supply",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/UPS.jpg/320px-UPS.jpg",
+                explanation: "A device that provides emergency power when the main power fails.",
+                chinese: "不间断电源：主电源故障时提供应急电源的设备。"
+            },
+            {
+                term: "UPS",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/UPS.jpg/320px-UPS.jpg",
+                explanation: "Uninterruptible Power Supply, a device that provides emergency power.",
+                chinese: "UPS：不间断电源，提供应急电源的设备。"
+            },
+            {
+                term: "URL",
+                explanation: "Uniform Resource Locator, the address of a resource on the Internet.",
+                chinese: "URL：统一资源定位符，互联网上资源的地址。"
+            },
+            {
+                term: "USB",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/USB_icon.svg/320px-USB_icon.svg.png",
+                explanation: "Universal Serial Bus, a standard for connecting peripherals.",
+                chinese: "USB：通用串行总线，连接外围设备的标准。"
+            },
+            {
+                term: "user ID",
+                explanation: "A unique identifier for a user on a system.",
+                chinese: "用户ID：系统上用户的唯一标识符。"
+            },
+            {
+                term: "User Manager for Domains",
+                explanation: "A Windows NT utility for managing user accounts.",
+                chinese: "域用户管理器：用于管理用户帐户的Windows NT实用程序。"
+            },
+            {
+                term: "user profile",
+                explanation: "A collection of settings specific to a user.",
+                chinese: "用户配置文件：特定于用户的设置集合。"
+            },
+            {
+                term: "user rights",
+                explanation: "Permissions granted to users to perform specific actions.",
+                chinese: "用户权限：授予用户执行特定操作的权限。"
+            },
+            {
+                term: "users' group",
+                explanation: "A group of users who share common interests or needs.",
+                chinese: "用户组：共享共同兴趣或需求的用户组。"
+            },
+            {
+                term: "UTP",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cat5.jpg/320px-Cat5.jpg",
+                explanation: "Unshielded Twisted Pair, a type of cable without shielding.",
+                chinese: "UTP：非屏蔽双绞线，没有屏蔽的电缆类型。"
+            },
+            {
+                term: "VBScript",
+                explanation: "Visual Basic Scripting Edition, a scripting language from Microsoft.",
+                chinese: "VBScript：Visual Basic脚本版，微软的脚本语言。"
+            },
+            {
+                term: "VGA",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/VGA_port.jpg/320px-VGA_port.jpg",
+                explanation: "Video Graphics Array, a display standard.",
+                chinese: "VGA：视频图形阵列，显示标准。"
+            },
+            {
+                term: "VINES",
+                explanation: "Virtual Integrated Network Service, a network operating system from Banyan Systems.",
+                chinese: "VINES：虚拟集成网络服务，Banyan Systems的网络操作系统。"
+            },
+            {
+                term: "virtual memory",
+                explanation: "A memory management technique that uses disk space as an extension of RAM.",
+                chinese: "虚拟内存：使用磁盘空间作为RAM扩展的内存管理技术。"
+            },
+            {
+                term: "virus",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Virus-153612.svg/320px-Virus-153612.svg.png",
+                explanation: "Malicious software that replicates itself and infects other files.",
+                chinese: "病毒：自我复制并感染其他文件的恶意软件。"
+            },
+            {
+                term: "Visio",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Microsoft_Visio_2019.svg/320px-Microsoft_Visio_2019.svg.png",
+                explanation: "A diagramming and vector graphics application from Microsoft.",
+                chinese: "Visio：微软的图表和矢量图形应用程序。"
+            },
+            {
+                term: "VoIP",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/VoIP-phone.svg/320px-VoIP-phone.svg.png",
+                explanation: "Voice over Internet Protocol, technology for voice calls over the Internet.",
+                chinese: "VoIP：互联网协议语音，通过互联网进行语音通话的技术。"
+            },
+            {
+                term: "volume name",
+                explanation: "The name assigned to a storage volume.",
+                chinese: "卷名：分配给存储卷的名称。"
+            },
+            {
+                term: "warchalking",
+                explanation: "The practice of marking locations with wireless access.",
+                chinese: "战争粉笔：用无线接入标记位置的做法。"
+            },
+            {
+                term: "wardriving",
+                explanation: "The practice of searching for wireless networks while moving.",
+                chinese: "战争驾驶：在移动时搜索无线网络的做法。"
+            },
+            {
+                term: "Web browser",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Google_Chrome_icon_%28September_2014%29.svg/320px-Google_Chrome_icon_%28September_2014%29.svg.png",
+                explanation: "A software application for accessing information on the World Wide Web.",
+                chinese: "网页浏览器：用于访问万维网上信息的软件应用程序。"
+            },
+            {
+                term: "WEP",
+                explanation: "Wired Equivalent Privacy, a security protocol for wireless networks.",
+                chinese: "WEP：有线等效隐私，无线网络的安全协议。"
+            },
+            {
+                term: "Wi-Fi",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Wi-Fi_Logo.svg/320px-Wi-Fi_Logo.svg.png",
+                explanation: "A technology for wireless local area networking.",
+                chinese: "Wi-Fi：无线局域网技术。"
+            },
+            {
+                term: "Windows",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Windows_logo_-_2021.svg/320px-Windows_logo_-_2021.svg.png",
+                explanation: "A family of operating systems from Microsoft.",
+                chinese: "Windows：微软的操作系统系列。"
+            },
+            {
+                term: "Windows 95",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/5/5f/Windows_95_logo_with_shadow.svg/320px-Windows_95_logo_with_shadow.svg.png",
+                explanation: "A consumer-oriented operating system from Microsoft released in 1995.",
+                chinese: "Windows 95：微软于1995年发布的面向消费者的操作系统。"
+            },
+            {
+                term: "Windows 98",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/5/5f/Windows_95_logo_with_shadow.svg/320px-Windows_95_logo_with_shadow.svg.png",
+                explanation: "A consumer-oriented operating system from Microsoft released in 1998.",
+                chinese: "Windows 98：微软于1998年发布的面向消费者的操作系统。"
+            },
+            {
+                term: "Windows 2000 Server",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/5/5f/Windows_95_logo_with_shadow.svg/320px-Windows_95_logo_with_shadow.svg.png",
+                explanation: "A server operating system from Microsoft released in 2000.",
+                chinese: "Windows 2000 Server：微软于2000年发布的服务器操作系统。"
+            },
+            {
+                term: "Windows for Workgroups",
+                explanation: "A version of Windows 3.1 with enhanced networking capabilities.",
+                chinese: "Windows for Workgroups：具有增强网络功能的Windows 3.1版本。"
+            },
+            {
+                term: "Windows Millennium Edition",
+                explanation: "A consumer-oriented operating system from Microsoft released in 2000.",
+                chinese: "Windows Millennium Edition：微软于2000年发布的面向消费者的操作系统。"
+            },
+            {
+                term: "Windows NT",
+                explanation: "A family of operating systems from Microsoft for business use.",
+                chinese: "Windows NT：微软用于商业用途的操作系统系列。"
+            },
+            {
+                term: "Windows Server 2003",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/5/5f/Windows_95_logo_with_shadow.svg/320px-Windows_95_logo_with_shadow.svg.png",
+                explanation: "A server operating system from Microsoft released in 2003.",
+                chinese: "Windows Server 2003：微软于2003年发布的服务器操作系统。"
+            },
+            {
+                term: "Windows XP",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Microsoft_Windows_XP_logo.svg/320px-Microsoft_Windows_XP_logo.svg.png",
+                explanation: "A consumer-oriented operating system from Microsoft released in 2001.",
+                chinese: "Windows XP：微软于2001年发布的面向消费者的操作系统。"
+            },
+            {
+                term: "wireless",
+                explanation: "Communication without physical connections.",
+                chinese: "无线：没有物理连接的通信。"
+            },
+            {
+                term: "wireless access point",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Wireless_Access_Point_icon.svg/320px-Wireless_Access_Point_icon.svg.png",
+                explanation: "A device that allows wireless devices to connect to a wired network.",
+                chinese: "无线接入点：允许无线设备连接到有线网络的设备。"
+            },
+            {
+                term: "wiring closet",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Wiring_closet.jpg/320px-Wiring_closet.jpg",
+                explanation: "A room or space where networking equipment is installed.",
+                chinese: "配线间：安装网络设备的房间或空间。"
+            },
+            {
+                term: "workstation",
+                explanation: "A high-performance computer used for specialized applications.",
+                chinese: "工作站：用于专业应用程序的高性能计算机。"
+            },
+            {
+                term: "World Wide Web",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/WWW_logo_by_Robert_Cailliau.svg/320px-WWW_logo_by_Robert_Cailliau.svg.png",
+                explanation: "An information system of interlinked hypertext documents.",
+                chinese: "万维网：互连超文本文档的信息系统。"
+            },
+            {
+                term: "WPA",
+                explanation: "Wi-Fi Protected Access, a security protocol for wireless networks.",
+                chinese: "WPA：Wi-Fi保护访问，无线网络的安全协议。"
+            },
+            {
+                term: "WWW",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/WWW_logo_by_Robert_Cailliau.svg/320px-WWW_logo_by_Robert_Cailliau.svg.png",
+                explanation: "World Wide Web, an information system of interlinked hypertext documents.",
+                chinese: "WWW：万维网，互连超文本文档的信息系统。"
+            },
+            {
+                term: "X10",
+                explanation: "A protocol for home automation.",
+                chinese: "X10：家庭自动化协议。"
+            },
+            {
+                term: "yellow cable",
+                explanation: "A nickname for standard Ethernet cable.",
+                chinese: "黄缆：标准以太网电缆的昵称。"
+            },
+            {
+                term: "zone",
+                explanation: "A portion of the DNS namespace.",
+                chinese: "区域：DNS命名空间的一部分。"
             }
-            // Additional terms would continue here...
         ];
 
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
-            const termsGrid = document.getElementById('termsGrid');
+            const termsBody = document.getElementById('termsBody');
             const pagination = document.getElementById('pagination');
             const searchInput = document.getElementById('searchInput');
             const statusFilter = document.getElementById('statusFilter');
@@ -473,7 +2273,7 @@
             const progressText = document.getElementById('progressText');
             
             let currentPage = 1;
-            const termsPerPage = 6; // Reduced for demo purposes
+            const termsPerPage = 30;
             
             // Load studied terms from localStorage
             let studiedTerms = JSON.parse(localStorage.getItem('studiedTerms')) || [];
@@ -512,33 +2312,33 @@
                 const endIndex = startIndex + termsPerPage;
                 const termsToShow = filteredTerms.slice(startIndex, endIndex);
                 
-                // Clear the grid
-                termsGrid.innerHTML = '';
+                // Clear the table body
+                termsBody.innerHTML = '';
                 
                 // Render terms
                 termsToShow.forEach(term => {
                     const isStudied = studiedTerms.includes(term.term);
                     
-                    const termCard = document.createElement('div');
-                    termCard.className = 'term-card';
+                    const termRow = document.createElement('tr');
                     
-                    termCard.innerHTML = `
-                        <div class="term-header">
-                            <div class="term-name">${term.term}</div>
+                    termRow.innerHTML = `
+                        <td class="term-column">
+                            <div class="term-english">${term.term}</div>
+                            <div class="term-chinese">${term.chinese.split('：')[1] || term.chinese}</div>
                             <div class="term-status ${isStudied ? 'studied' : ''}" data-term="${term.term}"></div>
-                        </div>
-                        <div class="term-content">
+                        </td>
+                        <td class="explanation-column">
+                            <div class="explanation-english">${term.explanation}</div>
+                            <div class="explanation-chinese">${term.chinese}</div>
+                        </td>
+                        <td class="image-column">
                             ${term.image ? `
-                                <div class="term-image">
-                                    <img src="${term.image}" alt="${term.term}">
-                                </div>
-                            ` : ''}
-                            <div class="term-explanation">${term.explanation}</div>
-                            <div class="term-translation">${term.chinese}</div>
-                        </div>
+                                <img src="${term.image}" alt="${term.term}" class="term-image">
+                            ` : '<div class="no-image">No image available</div>'}
+                        </td>
                     `;
                     
-                    termsGrid.appendChild(termCard);
+                    termsBody.appendChild(termRow);
                 });
                 
                 // Render pagination
@@ -604,7 +2404,7 @@
             });
             
             // Event delegation for term status toggles
-            termsGrid.addEventListener('click', (e) => {
+            termsBody.addEventListener('click', (e) => {
                 if (e.target.classList.contains('term-status')) {
                     const term = e.target.getAttribute('data-term');
                     toggleStudiedStatus(term);
