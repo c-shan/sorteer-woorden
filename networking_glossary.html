@@ -1,726 +1,619 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>网络术语词典</title>
+    <title>Networking Terminology Dictionary</title>
     <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+            --highlight-color: #e74c3c;
+            --progress-color: #2ecc71;
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.5;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background-color: #f5f7fa;
             color: #333;
-            min-height: 100vh;
-            padding: 15px;
+            line-height: 1.6;
         }
         
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-        
-        .header-row {
-            display: grid;
-            grid-template-columns: 1fr 2fr 1fr;
-            gap: 15px;
-            padding: 15px;
-            background: linear-gradient(135deg, #2c3e50, #34495e);
+        header {
+            background-color: var(--primary-color);
             color: white;
-            align-items: center;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
         
-        .header-title {
-            text-align: left;
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
         }
         
         h1 {
-            font-size: 1.8em;
-            margin-bottom: 5px;
+            font-size: 1.8rem;
         }
         
-        .subtitle {
-            font-size: 0.9em;
-            opacity: 0.9;
-        }
-        
-        .progress-info {
-            text-align: center;
-            padding: 10px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 8px;
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
         .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 4px;
-            margin: 8px 0;
+            width: 200px;
+            height: 10px;
+            background-color: var(--dark-color);
+            border-radius: 5px;
             overflow: hidden;
         }
         
-        .progress {
+        .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #e74c3c, #e67e22);
-            border-radius: 4px;
-            transition: width 0.3s ease;
+            background-color: var(--progress-color);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
         }
         
         .controls {
             display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-        }
-        
-        button {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 20px;
-            background: linear-gradient(135deg, #3498db, #2980b9);
-            color: white;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-        
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-        
-        button:disabled {
-            background: #7f8c8d;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
         
         .search-box {
-            margin: 10px 15px;
+            flex: 1;
+            min-width: 300px;
         }
         
-        input[type="text"] {
+        .search-box input {
             width: 100%;
-            padding: 10px 15px;
+            padding: 0.8rem;
             border: 1px solid #ddd;
-            border-radius: 20px;
-            font-size: 14px;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            font-size: 1rem;
         }
         
-        .terms-container {
-            padding: 0 15px 15px;
-            max-height: calc(100vh - 200px);
-            overflow-y: auto;
-        }
-        
-        .term-row {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 15px;
-            padding: 12px;
-            border-bottom: 1px solid #eee;
-            transition: all 0.2s ease;
-            align-items: start;
-        }
-        
-        .term-row:hover {
-            background: #f8f9fa;
-        }
-        
-        .term-row.learned {
-            background: #f0fff0;
-        }
-        
-        .term-name-section {
+        .filter-controls {
             display: flex;
-            flex-direction: column;
-            gap: 8px;
+            gap: 1rem;
+        }
+        
+        .filter-controls select {
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+            font-size: 1rem;
+        }
+        
+        .terms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .term-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .term-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .term-header {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         
         .term-name {
-            font-size: 1.1em;
             font-weight: bold;
-            color: #2c3e50;
+            font-size: 1.2rem;
+        }
+        
+        .term-status {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.3);
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
         }
         
-        .term-name:hover {
-            color: #e74c3c;
+        .term-status.studied {
+            background-color: var(--progress-color);
         }
         
-        .term-image-link {
-            font-size: 0.85em;
-            color: #3498db;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .term-image-link:hover {
-            text-decoration: underline;
-        }
-        
-        .term-description-section {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        
-        .english-desc {
-            padding: 8px;
-            border-radius: 6px;
-            font-size: 0.9em;
-            line-height: 1.4;
-            background: #f8f9fa;
-            border-left: 3px solid #3498db;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        
-        .english-desc:hover {
-            background: #e9ecef;
-            transform: translateX(3px);
-        }
-        
-        .chinese-desc {
-            padding: 8px;
-            border-radius: 6px;
-            font-size: 0.9em;
-            line-height: 1.4;
-            background: #f0f7ff;
-            border-left: 3px solid #e74c3c;
-        }
-        
-        .learned-indicator {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 0.85em;
-            color: #27ae60;
+        .term-status.studied::after {
+            content: "✓";
+            color: white;
             font-weight: bold;
+        }
+        
+        .term-content {
+            padding: 1rem;
+        }
+        
+        .term-image {
+            width: 100%;
+            height: 150px;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .term-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .term-explanation {
+            margin-bottom: 1rem;
+        }
+        
+        .term-translation {
+            border-top: 1px solid #eee;
+            padding-top: 1rem;
+            font-style: italic;
+            color: #666;
         }
         
         .pagination {
             display: flex;
             justify-content: center;
-            gap: 10px;
-            padding: 15px;
-            background: #f8f9fa;
+            margin-top: 2rem;
+            gap: 0.5rem;
+        }
+        
+        .page-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            background-color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .page-btn:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .page-btn.active {
+            background-color: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+            color: #666;
             border-top: 1px solid #eee;
         }
         
-        .page-info {
-            padding: 8px 15px;
-            background: white;
-            border-radius: 20px;
-            font-size: 0.9em;
-        }
-        
-        @media (max-width: 1024px) {
-            .header-row {
+        @media (max-width: 768px) {
+            .terms-grid {
                 grid-template-columns: 1fr;
-                gap: 10px;
-                text-align: center;
-            }
-            
-            .header-title {
-                text-align: center;
             }
             
             .controls {
-                justify-content: center;
+                flex-direction: column;
             }
             
-            .term-row {
-                grid-template-columns: 1fr;
-                gap: 10px;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .container {
-                border-radius: 0;
-            }
-            
-            body {
-                padding: 0;
-            }
-            
-            h1 {
-                font-size: 1.5em;
+            .search-box {
+                min-width: 100%;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header-row">
-            <div class="header-title">
-                <h1>📚 网络术语词典</h1>
-                <p class="subtitle">点击术语或描述学习发音 • 中英双语 • 智能进度跟踪</p>
-            </div>
-            
-            <div class="progress-info">
-                <div>进度: <span id="learnedCount">0</span>/<span id="totalCount">0</span></div>
+    <header>
+        <div class="header-content">
+            <h1>Networking Terminology Dictionary</h1>
+            <div class="progress-container">
+                <span>Progress:</span>
                 <div class="progress-bar">
-                    <div class="progress" id="progressFill"></div>
+                    <div class="progress-fill" id="progressFill"></div>
                 </div>
-                <div>最后学习: <span id="lastLearned">暂无</span></div>
-            </div>
-            
-            <div class="controls">
-                <button id="prevPage">上一页</button>
-                <button id="nextPage">下一页</button>
-                <button id="resetProgress">重置</button>
+                <span id="progressText">0/30</span>
             </div>
         </div>
-        
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="🔍 搜索术语、中文或描述...">
+    </header>
+    
+    <div class="container">
+        <div class="controls">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search terms...">
+            </div>
+            <div class="filter-controls">
+                <select id="statusFilter">
+                    <option value="all">All Terms</option>
+                    <option value="studied">Studied</option>
+                    <option value="unstudied">Not Studied</option>
+                </select>
+                <select id="sortSelect">
+                    <option value="name">Sort by Name</option>
+                    <option value="status">Sort by Status</option>
+                </select>
+            </div>
         </div>
         
-        <div class="terms-container" id="termsContainer">
-            <!-- 术语行将通过JavaScript动态生成 -->
+        <div class="terms-grid" id="termsGrid">
+            <!-- Terms will be dynamically inserted here -->
         </div>
         
-        <div class="pagination">
-            <button id="firstPage">首页</button>
-            <button id="prevPageBottom">上一页</button>
-            <span class="page-info">第 <span id="currentPage">1</span> 页，共 <span id="totalPages">1</span> 页</span>
-            <button id="nextPageBottom">下一页</button>
-            <button id="lastPage">末页</button>
+        <div class="pagination" id="pagination">
+            <!-- Pagination buttons will be dynamically inserted here -->
         </div>
     </div>
+    
+    <footer>
+        <p>Networking Terminology Dictionary &copy; 2023</p>
+    </footer>
 
     <script>
-        // 完整术语数据 - 这里只显示部分，实际使用时需要包含所有术语
-        const termsData = [
+        // Sample data for networking terms
+        const networkingTerms = [
             {
                 term: "10Base2",
-                textDesc: "An early Ethernet standard using thin coaxial cable (thinnet) forming a bus topology. Limited to 185 meters per segment.",
-                chinese: "10Base2 细缆以太网 - 使用细同轴电缆形成总线拓扑的早期以太网标准。每个网段限制为185米。"
+                image: "https://via.placeholder.com/300x150?text=10Base2+Cable",
+                explanation: "An Ethernet standard that uses thin coaxial cable (thinnet) with a maximum segment length of 185 meters.",
+                chinese: "10Base2：使用细同轴电缆（细缆）的以太网标准，最大网段长度为185米。"
             },
             {
                 term: "10Base5",
-                textDesc: "An early Ethernet standard using thick coaxial cable forming a bus topology. Known as 'Thicknet', it could span 500 meters per segment.",
-                chinese: "10Base5 粗缆以太网 - 使用粗同轴电缆形成总线拓扑的早期以太网标准。被称为'粗缆'，每个网段可达500米。"
+                image: "https://via.placeholder.com/300x150?text=10Base5+Cable",
+                explanation: "The original Ethernet standard that uses thick coaxial cable with a maximum segment length of 500 meters.",
+                chinese: "10Base5：原始以太网标准，使用粗同轴电缆，最大网段长度为500米。"
             },
             {
                 term: "10BaseT",
-                textDesc: "An Ethernet standard using twisted-pair cable (Cat 3 or higher) in a star topology. Limited to 100 meters from hub to node.",
-                chinese: "10BaseT 双绞线以太网 - 使用双绞线在星型拓扑中的以太网标准。从集线器到节点的距离限制为100米。"
+                image: "https://via.placeholder.com/300x150?text=10BaseT+Connection",
+                explanation: "An Ethernet standard that uses twisted-pair cable with a maximum segment length of 100 meters.",
+                chinese: "10BaseT：使用双绞线电缆的以太网标准，最大网段长度为100米。"
             },
             {
                 term: "100BaseFX",
-                textDesc: "A Fast Ethernet standard (100 Mbps) over fiber-optic cable, used for longer distance connections (up to 2 km).",
-                chinese: "100BaseFX 光纤快速以太网 - 通过光纤电缆的快速以太网标准，用于更长距离连接（最长2公里）。"
+                explanation: "A Fast Ethernet standard that uses fiber optic cable with a maximum segment length of 412 meters.",
+                chinese: "100BaseFX：使用光纤电缆的快速以太网标准，最大网段长度为412米。"
             },
             {
                 term: "100BaseT4",
-                textDesc: "An early 100 Mbps Ethernet standard that used all four pairs of Cat 3 UTP cable. Largely obsolete.",
-                chinese: "100BaseT4 四对线快速以太网 - 使用Cat 3 UTP电缆所有四对的早期100 Mbps以太网标准。基本已过时。"
+                explanation: "A Fast Ethernet standard that uses four pairs of Category 3 or better UTP cable.",
+                chinese: "100BaseT4：使用四对3类或更好UTP电缆的快速以太网标准。"
             },
             {
                 term: "100BaseTX",
-                textDesc: "The most common Fast Ethernet standard (100 Mbps) over Cat 5 UTP cable, using two wire pairs.",
-                chinese: "100BaseTX 双绞线快速以太网 - 通过Cat 5 UTP电缆使用两对电线的最常见快速以太网标准。"
+                image: "https://via.placeholder.com/300x150?text=100BaseTX",
+                explanation: "A Fast Ethernet standard that uses two pairs of Category 5 UTP or STP cable.",
+                chinese: "100BaseTX：使用两对5类UTP或STP电缆的快速以太网标准。"
             },
             {
                 term: "100VG AnyLan",
-                textDesc: "A networking standard that competed with Fast Ethernet. It used a demand priority protocol instead of CSMA/CD.",
-                chinese: "100VG AnyLan 标准 - 与快速以太网竞争的网络标准。它使用需求优先级协议而不是CSMA/CD。"
+                explanation: "A networking technology developed by Hewlett-Packard that can handle both Ethernet and Token Ring frames.",
+                chinese: "100VG AnyLan：惠普开发的网络技术，可以处理以太网和令牌环帧。"
             },
             {
                 term: "1000BaseT",
-                textDesc: "A Gigabit Ethernet standard (1000 Mbps) running over standard Cat 5e or better twisted-pair cable.",
-                chinese: "1000BaseT 千兆以太网 - 通过标准Cat 5e或更好双绞线电缆运行的千兆以太网标准。"
-            },
-            {
-                term: "1000000000BaseT",
-                textDesc: "This is a humorous or formal way of writing 'Gigabit Ethernet' (1,000,000,000 bits per second = 1 Gbps).",
-                chinese: "千兆以太网（十亿比特） - 这是写'千兆以太网'的幽默或正式方式。"
+                explanation: "A Gigabit Ethernet standard that uses four pairs of Category 5 or better UTP cable.",
+                chinese: "1000BaseT：使用四对5类或更好UTP电缆的千兆以太网标准。"
             },
             {
                 term: "802.2",
-                textDesc: "The IEEE Logical Link Control (LLC) sublayer, part of the data link layer. It provides a common interface for network protocols.",
-                chinese: "802.2 LLC逻辑链路控制 - IEEE逻辑链路控制子层，数据链路层的一部分。它为网络协议提供通用接口。"
+                explanation: "The IEEE standard for Logical Link Control (LLC), the upper portion of the data link layer.",
+                chinese: "802.2：逻辑链路控制（LLC）的IEEE标准，数据链路层的上层部分。"
             },
             {
                 term: "802.3",
-                textDesc: "The IEEE standard defining Ethernet, covering the physical layer and the MAC sublayer of the data link layer.",
-                chinese: "802.3 以太网标准 - 定义以太网的IEEE标准，涵盖物理层和数据链路层的MAC子层。"
+                image: "https://via.placeholder.com/300x150?text=802.3+Ethernet",
+                explanation: "The IEEE standard for Ethernet networks.",
+                chinese: "802.3：以太网网络的IEEE标准。"
             },
             {
                 term: "802.11",
-                textDesc: "The family of IEEE standards that define Wireless Local Area Networking (Wi-Fi).",
-                chinese: "802.11 无线网络标准 - 定义无线局域网的IEEE标准系列。"
+                image: "https://via.placeholder.com/300x150?text=802.11+WiFi",
+                explanation: "The IEEE standard for wireless networking.",
+                chinese: "802.11：无线网络的IEEE标准。"
             },
             {
                 term: "8088 processor",
-                textDesc: "The 16-bit microprocessor used in the original IBM PC (1981).",
-                chinese: "8088 处理器 - 原始IBM PC（1981）中使用的16位微处理器。"
+                explanation: "An early Intel microprocessor used in the original IBM PC.",
+                chinese: "8088处理器：早期英特尔微处理器，用于原始IBM PC。"
             },
             {
                 term: "80286 processor",
-                textDesc: "A 16-bit Intel processor (the '286') that introduced protected mode and was used in IBM PC/AT computers.",
-                chinese: "80286 处理器 - 引入保护模式并在IBM PC/AT计算机中使用的16位英特尔处理器。"
+                explanation: "A 16-bit microprocessor introduced by Intel in 1982.",
+                chinese: "80286处理器：英特尔于1982年推出的16位微处理器。"
             },
             {
                 term: "80386 processor",
-                textDesc: "The first 32-bit Intel processor (the '386'), a major step forward in performance and capability for PCs.",
-                chinese: "80386 处理器 - 第一个32位英特尔处理器，是PC性能和能力的重大进步。"
+                explanation: "A 32-bit microprocessor introduced by Intel in 1985.",
+                chinese: "80386处理器：英特尔于1985年推出的32位微处理器。"
             },
             {
                 term: "80486 processor",
-                textDesc: "An Intel 32-bit processor (the '486') that integrated a math coprocessor and cache on the chip.",
-                chinese: "80486 处理器 - 将数学协处理器和缓存集成在芯片上的英特尔32位处理器。"
+                explanation: "A 32-bit microprocessor introduced by Intel in 1989.",
+                chinese: "80486处理器：英特尔于1989年推出的32位微处理器。"
             },
             {
                 term: "AAUI",
-                textDesc: "Apple Attachment Unit Interface. A proprietary Ethernet port on early Apple Macintoshes that required an external transceiver.",
-                chinese: "AAUI 苹果专用接口 - 早期Apple Macintosh上的专用以太网端口，需要外部收发器。"
+                explanation: "Apple Attachment Unit Interface, a proprietary Ethernet connector used on older Macintosh computers.",
+                chinese: "AAUI：苹果附件单元接口，旧款Macintosh计算机上使用的专用以太网连接器。"
             },
             {
                 term: "access rights",
-                textDesc: "The permissions granted to a user or group for a specific resource like a file, folder, or printer.",
-                chinese: "访问权限 - 授予用户或组对特定资源（如文件、文件夹或打印机）的权限。"
+                explanation: "Permissions that determine what actions a user can perform on a network resource.",
+                chinese: "访问权限：确定用户可以在网络资源上执行哪些操作的权限。"
             },
             {
                 term: "account",
-                textDesc: "A unique identity on a computer system or network, associated with a user, containing credentials and settings.",
-                chinese: "账户 - 在计算机系统或网络上的唯一身份，与用户关联，包含凭据和设置。"
+                explanation: "A record containing user information that allows access to network resources.",
+                chinese: "账户：包含用户信息的记录，允许访问网络资源。"
             },
             {
                 term: "acronym",
-                textDesc: "A word formed from the initial letters of other words (e.g., LAN for Local Area Network).",
-                chinese: "首字母缩略词 - 由其他单词的首字母组成的单词。"
+                explanation: "A word formed from the initial letters of a multi-word name.",
+                chinese: "首字母缩略词：由多词名称的首字母组成的单词。"
             },
             {
                 term: "Active Directory",
-                textDesc: "Microsoft's directory service for Windows domain networks, used for centralized management of users, computers, and policies.",
-                chinese: "Active Directory 活动目录 - Microsoft用于Windows域网络的目录服务，用于集中管理用户、计算机和策略。"
+                image: "https://via.placeholder.com/300x150?text=Active+Directory",
+                explanation: "Microsoft's directory service for Windows domain networks.",
+                chinese: "Active Directory：微软用于Windows域网络的目录服务。"
             },
             {
                 term: "Active Server Pages",
-                textDesc: "A Microsoft technology for creating dynamic, server-side web pages, now largely superseded by ASP.NET.",
-                chinese: "Active Server Pages 动态服务器页面 - 用于创建动态服务器端网页的Microsoft技术，现在基本上被ASP.NET取代。"
+                explanation: "A Microsoft technology for creating dynamic web pages.",
+                chinese: "Active Server Pages：微软创建动态网页的技术。"
             },
             {
                 term: "adapter card",
-                textDesc: "A circuit board that is installed into a computer to provide additional functionality, such as a network connection.",
-                chinese: "适配卡 - 安装在计算机中以提供额外功能（如网络连接）的电路板。"
+                image: "https://via.placeholder.com/300x150?text=Network+Adapter",
+                explanation: "A circuit board that adds functionality to a computer.",
+                chinese: "适配卡：为计算机添加功能的电路板。"
             },
             {
                 term: "address book",
-                textDesc: "A database, either in an email client or on a server, used for storing contact information, especially email addresses.",
-                chinese: "地址簿 - 电子邮件客户端或服务器上的数据库，用于存储联系信息，尤其是电子邮件地址。"
+                explanation: "A database of contact information in email and other applications.",
+                chinese: "地址簿：电子邮件和其他应用程序中的联系人信息数据库。"
             },
             {
                 term: "administrator",
-                textDesc: "The user account with the highest level of privileges, responsible for managing a computer or network.",
-                chinese: "管理员 - 具有最高权限级别的用户账户，负责管理计算机或网络。"
+                explanation: "A user with complete control over a computer or network.",
+                chinese: "管理员：对计算机或网络具有完全控制权的用户。"
             },
             {
                 term: "AFP",
-                textDesc: "Apple Filing Protocol. The network protocol for file services in classic Mac OS and macOS.",
-                chinese: "AFP 苹果文件协议 - 经典Mac OS和macOS中文件服务的网络协议。"
+                explanation: "Apple Filing Protocol, a network protocol for file services in macOS.",
+                chinese: "AFP：苹果归档协议，用于macOS中文件服务的网络协议。"
             },
             {
                 term: "AGP",
-                textDesc: "Accelerated Graphics Port. A high-speed point-to-point channel for attaching a graphics card to a computer's motherboard.",
-                chinese: "AGP 加速图形端口 - 用于将图形卡连接到计算机主板的高速点对点通道。"
+                explanation: "Accelerated Graphics Port, a high-speed point-to-point channel for attaching a video card.",
+                chinese: "AGP：加速图形端口，用于连接显卡的高速点对点通道。"
             },
             {
                 term: "allocation unit",
-                textDesc: "Also known as a 'cluster.' It is the smallest amount of disk space that can be allocated to hold a file.",
-                chinese: "分配单元 - 也称为'簇'。是可以分配给保存文件的最小磁盘空间量。"
+                explanation: "The smallest unit of disk space that can be allocated to hold a file.",
+                chinese: "分配单元：可以分配给文件的最小磁盘空间单位。"
             },
             {
                 term: "antivirus program",
-                textDesc: "Software designed to detect, prevent, and remove malicious software (malware).",
-                chinese: "防病毒程序 - 设计用于检测、预防和移除恶意软件的软件。"
+                image: "https://via.placeholder.com/300x150?text=Antivirus",
+                explanation: "Software designed to detect and remove computer viruses.",
+                chinese: "防病毒程序：设计用于检测和删除计算机病毒的软件。"
+            },
+            {
+                term: "Apache",
+                image: "https://via.placeholder.com/300x150?text=Apache+Web+Server",
+                explanation: "A popular open-source web server software.",
+                chinese: "Apache：流行的开源Web服务器软件。"
+            },
+            {
+                term: "AppleTalk",
+                explanation: "A proprietary suite of networking protocols developed by Apple for Macintosh networks.",
+                chinese: "AppleTalk：苹果为Macintosh网络开发的专有网络协议套件。"
+            },
+            {
+                term: "application layer",
+                explanation: "The seventh layer of the OSI model, where network applications and protocols operate.",
+                chinese: "应用层：OSI模型的第七层，网络应用程序和协议在此运行。"
             }
-            // 这里可以继续添加更多术语...
+            // Additional terms would continue here...
         ];
 
-        // 应用程序状态
-        let currentPage = 1;
-        const termsPerPage = 10; // 每页显示10个术语
-        let learnedTerms = JSON.parse(localStorage.getItem('learnedTerms')) || {};
-        let lastLearnedTerm = localStorage.getItem('lastLearnedTerm') || '暂无';
-        let isSearching = false;
-        let searchResults = [];
-
-        // 初始化应用程序
-        function initApp() {
-            displayPage(currentPage);
-            updateProgress();
-            setupEventListeners();
-            updateTotalPages();
-        }
-
-        // 显示特定页面的术语
-        function displayPage(page) {
-            const container = document.getElementById('termsContainer');
-            const startIndex = (page - 1) * termsPerPage;
-            const endIndex = startIndex + termsPerPage;
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            const termsGrid = document.getElementById('termsGrid');
+            const pagination = document.getElementById('pagination');
+            const searchInput = document.getElementById('searchInput');
+            const statusFilter = document.getElementById('statusFilter');
+            const sortSelect = document.getElementById('sortSelect');
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
             
-            // 确定要显示的术语列表
-            let termsToDisplay = termsData;
-            if (isSearching && searchResults.length > 0) {
-                termsToDisplay = searchResults;
-            }
+            let currentPage = 1;
+            const termsPerPage = 6; // Reduced for demo purposes
             
-            const pageTerms = termsToDisplay.slice(startIndex, endIndex);
-
-            container.innerHTML = '';
-
-            if (pageTerms.length === 0) {
-                container.innerHTML = '<div style="text-align: center; padding: 40px; color: #666;">此页没有术语</div>';
-                return;
-            }
-
-            pageTerms.forEach(termData => {
-                const termRow = createTermRow(termData);
-                container.appendChild(termRow);
-            });
-
-            document.getElementById('currentPage').textContent = page;
-            updatePaginationButtons();
-            updateTotalPages();
-        }
-
-        // 创建术语行
-        function createTermRow(termData) {
-            const row = document.createElement('div');
-            row.className = `term-row ${learnedTerms[termData.term] ? 'learned' : ''}`;
+            // Load studied terms from localStorage
+            let studiedTerms = JSON.parse(localStorage.getItem('studiedTerms')) || [];
             
-            // 构建维基百科链接
-            const wikiLink = `https://en.wikipedia.org/wiki/${encodeURIComponent(termData.term)}`;
-            
-            row.innerHTML = `
-                <div class="term-name-section">
-                    <div class="term-name" onclick="speakTerm('${termData.term}')">
-                        ${termData.term}
-                        ${learnedTerms[termData.term] ? '<span class="learned-indicator">✓</span>' : ''}
-                    </div>
-                    <a href="${wikiLink}" target="_blank" class="term-image-link">🖼️ 查看维基百科</a>
-                </div>
-                <div class="term-description-section">
-                    <div class="english-desc" onclick="speakText('${termData.textDesc.replace(/'/g, "\\'")}')">
-                        ${termData.textDesc}
-                    </div>
-                    <div class="chinese-desc">
-                        ${termData.chinese}
-                    </div>
-                </div>
-            `;
-
-            // 点击行标记为已学习
-            row.addEventListener('click', (e) => {
-                if (!e.target.classList.contains('term-image-link') && 
-                    !e.target.classList.contains('english-desc')) {
-                    toggleLearned(termData.term, termData.chinese);
-                    row.classList.toggle('learned');
-                    const indicator = row.querySelector('.learned-indicator');
-                    if (row.classList.contains('learned')) {
-                        if (!indicator) {
-                            const nameElement = row.querySelector('.term-name');
-                            const indicatorSpan = document.createElement('span');
-                            indicatorSpan.className = 'learned-indicator';
-                            indicatorSpan.textContent = ' ✓';
-                            nameElement.appendChild(indicatorSpan);
-                        }
-                    } else {
-                        if (indicator) {
-                            indicator.remove();
-                        }
-                    }
+            // Render terms based on current page and filters
+            function renderTerms() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const filterValue = statusFilter.value;
+                const sortValue = sortSelect.value;
+                
+                // Filter terms based on search and status
+                let filteredTerms = networkingTerms.filter(term => {
+                    const matchesSearch = term.term.toLowerCase().includes(searchTerm) || 
+                                         term.explanation.toLowerCase().includes(searchTerm);
+                    const matchesStatus = filterValue === 'all' || 
+                                         (filterValue === 'studied' && studiedTerms.includes(term.term)) ||
+                                         (filterValue === 'unstudied' && !studiedTerms.includes(term.term));
+                    
+                    return matchesSearch && matchesStatus;
+                });
+                
+                // Sort terms
+                if (sortValue === 'name') {
+                    filteredTerms.sort((a, b) => a.term.localeCompare(b.term));
+                } else if (sortValue === 'status') {
+                    filteredTerms.sort((a, b) => {
+                        const aStudied = studiedTerms.includes(a.term);
+                        const bStudied = studiedTerms.includes(b.term);
+                        return bStudied - aStudied;
+                    });
                 }
-            });
-
-            return row;
-        }
-
-        // 更新分页按钮状态
-        function updatePaginationButtons() {
-            const totalPages = getTotalPages();
-            document.getElementById('prevPage').disabled = currentPage === 1;
-            document.getElementById('nextPage').disabled = currentPage >= totalPages;
-            document.getElementById('prevPageBottom').disabled = currentPage === 1;
-            document.getElementById('nextPageBottom').disabled = currentPage >= totalPages;
-            document.getElementById('firstPage').disabled = currentPage === 1;
-            document.getElementById('lastPage').disabled = currentPage >= totalPages;
-        }
-
-        // 获取总页数
-        function getTotalPages() {
-            let termsToCount = termsData;
-            if (isSearching && searchResults.length > 0) {
-                termsToCount = searchResults;
+                
+                // Calculate pagination
+                const totalPages = Math.ceil(filteredTerms.length / termsPerPage);
+                const startIndex = (currentPage - 1) * termsPerPage;
+                const endIndex = startIndex + termsPerPage;
+                const termsToShow = filteredTerms.slice(startIndex, endIndex);
+                
+                // Clear the grid
+                termsGrid.innerHTML = '';
+                
+                // Render terms
+                termsToShow.forEach(term => {
+                    const isStudied = studiedTerms.includes(term.term);
+                    
+                    const termCard = document.createElement('div');
+                    termCard.className = 'term-card';
+                    
+                    termCard.innerHTML = `
+                        <div class="term-header">
+                            <div class="term-name">${term.term}</div>
+                            <div class="term-status ${isStudied ? 'studied' : ''}" data-term="${term.term}"></div>
+                        </div>
+                        <div class="term-content">
+                            ${term.image ? `
+                                <div class="term-image">
+                                    <img src="${term.image}" alt="${term.term}">
+                                </div>
+                            ` : ''}
+                            <div class="term-explanation">${term.explanation}</div>
+                            <div class="term-translation">${term.chinese}</div>
+                        </div>
+                    `;
+                    
+                    termsGrid.appendChild(termCard);
+                });
+                
+                // Render pagination
+                renderPagination(totalPages);
+                
+                // Update progress
+                updateProgress();
             }
-            return Math.ceil(termsToCount.length / termsPerPage);
-        }
-
-        // 更新总页数显示
-        function updateTotalPages() {
-            const totalPages = getTotalPages();
-            document.getElementById('totalPages').textContent = totalPages;
-        }
-
-        // 更新学习进度
-        function updateProgress() {
-            const learnedCount = Object.keys(learnedTerms).length;
-            const totalCount = termsData.length;
-            const progress = (learnedCount / totalCount) * 100;
-
-            document.getElementById('learnedCount').textContent = learnedCount;
-            document.getElementById('totalCount').textContent = totalCount;
-            document.getElementById('progressFill').style.width = `${progress}%`;
-            document.getElementById('lastLearned').textContent = lastLearnedTerm;
-        }
-
-        // 发音功能 - 术语
-        function speakTerm(term) {
-            if ('speechSynthesis' in window) {
-                speechSynthesis.cancel(); // 停止当前语音
-                const utterance = new SpeechSynthesisUtterance(term);
-                utterance.lang = 'en-US';
-                utterance.rate = 0.8;
-                speechSynthesis.speak(utterance);
-            } else {
-                alert('您的浏览器不支持文本转语音功能');
-            }
-        }
-
-        // 发音功能 - 英文描述
-        function speakText(text) {
-            if ('speechSynthesis' in window) {
-                speechSynthesis.cancel(); // 停止当前语音
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'en-US';
-                utterance.rate = 0.8;
-                speechSynthesis.speak(utterance);
-            } else {
-                alert('您的浏览器不支持文本转语音功能');
-            }
-        }
-
-        // 切换学习状态
-        function toggleLearned(term, chinese) {
-            if (learnedTerms[term]) {
-                delete learnedTerms[term];
-            } else {
-                learnedTerms[term] = true;
-                lastLearnedTerm = `${term} - ${chinese}`;
-                localStorage.setItem('lastLearnedTerm', lastLearnedTerm);
-            }
-            localStorage.setItem('learnedTerms', JSON.stringify(learnedTerms));
-            updateProgress();
-        }
-
-        // 设置事件监听器
-        function setupEventListeners() {
-            // 上一页按钮
-            document.getElementById('prevPage').addEventListener('click', goToPrevPage);
-            document.getElementById('prevPageBottom').addEventListener('click', goToPrevPage);
             
-            // 下一页按钮
-            document.getElementById('nextPage').addEventListener('click', goToNextPage);
-            document.getElementById('nextPageBottom').addEventListener('click', goToNextPage);
-            
-            // 首页按钮
-            document.getElementById('firstPage').addEventListener('click', () => {
-                currentPage = 1;
-                displayPage(currentPage);
-            });
-            
-            // 末页按钮
-            document.getElementById('lastPage').addEventListener('click', () => {
-                currentPage = getTotalPages();
-                displayPage(currentPage);
-            });
-
-            // 重置进度按钮
-            document.getElementById('resetProgress').addEventListener('click', () => {
-                if (confirm('确定要重置所有学习进度吗？')) {
-                    learnedTerms = {};
-                    lastLearnedTerm = '暂无';
-                    localStorage.removeItem('learnedTerms');
-                    localStorage.removeItem('lastLearnedTerm');
-                    displayPage(currentPage);
-                    updateProgress();
+            // Render pagination buttons
+            function renderPagination(totalPages) {
+                pagination.innerHTML = '';
+                
+                for (let i = 1; i <= totalPages; i++) {
+                    const pageBtn = document.createElement('button');
+                    pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+                    pageBtn.textContent = i;
+                    pageBtn.addEventListener('click', () => {
+                        currentPage = i;
+                        renderTerms();
+                    });
+                    
+                    pagination.appendChild(pageBtn);
                 }
-            });
-
-            // 搜索功能
-            document.getElementById('searchInput').addEventListener('input', (e) => {
-                const searchTerm = e.target.value.toLowerCase();
-                if (searchTerm) {
-                    isSearching = true;
-                    searchResults = termsData.filter(term => 
-                        term.term.toLowerCase().includes(searchTerm) ||
-                        term.chinese.toLowerCase().includes(searchTerm) ||
-                        term.textDesc.toLowerCase().includes(searchTerm)
-                    );
-                    currentPage = 1; // 搜索时回到第一页
-                    displaySearchResults(searchResults);
+            }
+            
+            // Update progress bar and text
+            function updateProgress() {
+                const studiedCount = studiedTerms.length;
+                const totalCount = networkingTerms.length;
+                const percentage = (studiedCount / totalCount) * 100;
+                
+                progressFill.style.width = `${percentage}%`;
+                progressText.textContent = `${studiedCount}/${totalCount}`;
+            }
+            
+            // Toggle studied status
+            function toggleStudiedStatus(term) {
+                if (studiedTerms.includes(term)) {
+                    studiedTerms = studiedTerms.filter(t => t !== term);
                 } else {
-                    isSearching = false;
-                    searchResults = [];
-                    currentPage = 1; // 清除搜索时回到第一页
-                    displayPage(currentPage);
+                    studiedTerms.push(term);
+                }
+                
+                localStorage.setItem('studiedTerms', JSON.stringify(studiedTerms));
+                renderTerms();
+            }
+            
+            // Event listeners
+            searchInput.addEventListener('input', () => {
+                currentPage = 1;
+                renderTerms();
+            });
+            
+            statusFilter.addEventListener('change', () => {
+                currentPage = 1;
+                renderTerms();
+            });
+            
+            sortSelect.addEventListener('change', () => {
+                currentPage = 1;
+                renderTerms();
+            });
+            
+            // Event delegation for term status toggles
+            termsGrid.addEventListener('click', (e) => {
+                if (e.target.classList.contains('term-status')) {
+                    const term = e.target.getAttribute('data-term');
+                    toggleStudiedStatus(term);
                 }
             });
-        }
-
-        // 转到上一页
-        function goToPrevPage() {
-            if (currentPage > 1) {
-                currentPage--;
-                displayPage(currentPage);
-            }
-        }
-
-        // 转到下一页
-        function goToNextPage() {
-            if (currentPage < getTotalPages()) {
-                currentPage++;
-                displayPage(currentPage);
-            }
-        }
-
-        // 显示搜索结果
-        function displaySearchResults(results) {
-            const container = document.getElementById('termsContainer');
-            container.innerHTML = '';
-
-            if (results.length === 0) {
-                container.innerHTML = '<div style="text-align: center; padding: 40px; color: #666;">未找到匹配的术语</div>';
-                return;
-            }
-
-            // 使用displayPage来显示搜索结果，确保分页正常工作
-            displayPage(currentPage);
-        }
-
-        // 初始化应用
-        window.addEventListener('DOMContentLoaded', initApp);
+            
+            // Initial render
+            renderTerms();
+        });
     </script>
 </body>
 </html>
