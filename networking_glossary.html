@@ -308,7 +308,7 @@
     </div>
 
     <script>
-        // 完整术语数据 - 包含所有术语
+        // 完整术语数据
        // Complete data for networking terms
 const termsData  = [
 {
@@ -2258,3 +2258,251 @@ textDesc: "A portion of the DNS namespace.",
 chinese: "区域：DNS命名空间的一部分。"
 }
 ];
+        // 应用程序状态
+        let currentPage = 1;
+        const termsPerPage = 20;
+        let learnedTerms = JSON.parse(localStorage.getItem('learnedTerms')) || {};
+        let lastLearnedTerm = localStorage.getItem('lastLearnedTerm') || '暂无';
+
+        // 初始化应用程序
+        function initApp() {
+            displayPage(currentPage);
+            updateProgress();
+            setupEventListeners();
+            updateTotalPages();
+        }
+
+        // 显示特定页面的术语
+        function displayPage(page) {
+            const container = document.getElementById('termsContainer');
+            const startIndex = (page - 1) * termsPerPage;
+            const endIndex = startIndex + termsPerPage;
+            const pageTerms = termsData.slice(startIndex, endIndex);
+
+            container.innerHTML = '';
+
+            if (pageTerms.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 40px; color: #666;">此页没有术语</div>';
+                return;
+            }
+
+            pageTerms.forEach(termData => {
+                const termRow = createTermRow(termData);
+                container.appendChild(termRow);
+            });
+
+            document.getElementById('currentPage').textContent = page;
+            updatePaginationButtons();
+        }
+
+        // 创建术语行
+        function createTermRow(termData) {
+            const row = document.createElement('div');
+            row.className = `term-row ${learnedTerms[termData.term] ? 'learned' : ''}`;
+            
+            // 构建维基百科链接
+            const wikiLink = `https://en.wikipedia.org/wiki/${encodeURIComponent(termData.term)}`;
+            
+            row.innerHTML = `
+                <div class="term-name-section">
+                    <div class="term-name" onclick="speakTerm('${termData.term}')">
+                        ${termData.term}
+                        ${learnedTerms[termData.term] ? '<span class="learned-indicator">✓</span>' : ''}
+                    </div>
+                    <a href="${wikiLink}" target="_blank" class="term-image-link">🖼️ 查看维基百科</a>
+                </div>
+                <div class="term-description-section">
+                    <div class="english-desc" onclick="speakText('${termData.textDesc.replace(/'/g, "\\'")}')">
+                        ${termData.textDesc}
+                    </div>
+                    <div class="chinese-desc">
+                        ${termData.chinese}
+                    </div>
+                </div>
+            `;
+
+            // 点击行标记为已学习
+            row.addEventListener('click', (e) => {
+                if (!e.target.classList.contains('term-image-link') && 
+                    !e.target.classList.contains('english-desc')) {
+                    toggleLearned(termData.term, termData.chinese);
+                    row.classList.toggle('learned');
+                    const indicator = row.querySelector('.learned-indicator');
+                    if (row.classList.contains('learned')) {
+                        if (!indicator) {
+                            const nameElement = row.querySelector('.term-name');
+                            const indicatorSpan = document.createElement('span');
+                            indicatorSpan.className = 'learned-indicator';
+                            indicatorSpan.textContent = ' ✓';
+                            nameElement.appendChild(indicatorSpan);
+                        }
+                    } else {
+                        if (indicator) {
+                            indicator.remove();
+                        }
+                    }
+                }
+            });
+
+            return row;
+        }
+
+        // 更新分页按钮状态
+        function updatePaginationButtons() {
+            const totalPages = Math.ceil(termsData.length / termsPerPage);
+            document.getElementById('prevPage').disabled = currentPage === 1;
+            document.getElementById('nextPage').disabled = currentPage >= totalPages;
+            document.getElementById('prevPageBottom').disabled = currentPage === 1;
+            document.getElementById('nextPageBottom').disabled = currentPage >= totalPages;
+            document.getElementById('firstPage').disabled = currentPage === 1;
+            document.getElementById('lastPage').disabled = currentPage >= totalPages;
+        }
+
+        // 更新总页数显示
+        function updateTotalPages() {
+            const totalPages = Math.ceil(termsData.length / termsPerPage);
+            document.getElementById('totalPages').textContent = totalPages;
+        }
+
+        // 更新学习进度
+        function updateProgress() {
+            const learnedCount = Object.keys(learnedTerms).length;
+            const totalCount = termsData.length;
+            const progress = (learnedCount / totalCount) * 100;
+
+            document.getElementById('learnedCount').textContent = learnedCount;
+            document.getElementById('totalCount').textContent = totalCount;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+            document.getElementById('lastLearned').textContent = lastLearnedTerm;
+        }
+
+        // 发音功能 - 术语
+        function speakTerm(term) {
+            if ('speechSynthesis' in window) {
+                speechSynthesis.cancel(); // 停止当前语音
+                const utterance = new SpeechSynthesisUtterance(term);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.8;
+                speechSynthesis.speak(utterance);
+            } else {
+                alert('您的浏览器不支持文本转语音功能');
+            }
+        }
+
+        // 发音功能 - 英文描述
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                speechSynthesis.cancel(); // 停止当前语音
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.8;
+                speechSynthesis.speak(utterance);
+            } else {
+                alert('您的浏览器不支持文本转语音功能');
+            }
+        }
+
+        // 切换学习状态
+        function toggleLearned(term, chinese) {
+            if (learnedTerms[term]) {
+                delete learnedTerms[term];
+            } else {
+                learnedTerms[term] = true;
+                lastLearnedTerm = `${term} - ${chinese}`;
+                localStorage.setItem('lastLearnedTerm', lastLearnedTerm);
+            }
+            localStorage.setItem('learnedTerms', JSON.stringify(learnedTerms));
+            updateProgress();
+        }
+
+        // 设置事件监听器
+        function setupEventListeners() {
+            // 上一页按钮
+            document.getElementById('prevPage').addEventListener('click', goToPrevPage);
+            document.getElementById('prevPageBottom').addEventListener('click', goToPrevPage);
+            
+            // 下一页按钮
+            document.getElementById('nextPage').addEventListener('click', goToNextPage);
+            document.getElementById('nextPageBottom').addEventListener('click', goToNextPage);
+            
+            // 首页按钮
+            document.getElementById('firstPage').addEventListener('click', () => {
+                currentPage = 1;
+                displayPage(currentPage);
+            });
+            
+            // 末页按钮
+            document.getElementById('lastPage').addEventListener('click', () => {
+                currentPage = Math.ceil(termsData.length / termsPerPage);
+                displayPage(currentPage);
+            });
+
+            // 重置进度按钮
+            document.getElementById('resetProgress').addEventListener('click', () => {
+                if (confirm('确定要重置所有学习进度吗？')) {
+                    learnedTerms = {};
+                    lastLearnedTerm = '暂无';
+                    localStorage.removeItem('learnedTerms');
+                    localStorage.removeItem('lastLearnedTerm');
+                    displayPage(currentPage);
+                    updateProgress();
+                }
+            });
+
+            // 搜索功能
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                if (searchTerm) {
+                    const filteredTerms = termsData.filter(term => 
+                        term.term.toLowerCase().includes(searchTerm) ||
+                        term.chinese.toLowerCase().includes(searchTerm) ||
+                        term.textDesc.toLowerCase().includes(searchTerm)
+                    );
+                    displaySearchResults(filteredTerms);
+                } else {
+                    displayPage(currentPage);
+                }
+            });
+        }
+
+        // 转到上一页
+        function goToPrevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                displayPage(currentPage);
+            }
+        }
+
+        // 转到下一页
+        function goToNextPage() {
+            if (currentPage < Math.ceil(termsData.length / termsPerPage)) {
+                currentPage++;
+                displayPage(currentPage);
+            }
+        }
+
+        // 显示搜索结果
+        function displaySearchResults(results) {
+            const container = document.getElementById('termsContainer');
+            container.innerHTML = '';
+
+            if (results.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 40px; color: #666;">未找到匹配的术语</div>';
+                return;
+            }
+
+            results.forEach(termData => {
+                const termRow = createTermRow(termData);
+                container.appendChild(termRow);
+            });
+            
+            // 更新分页信息为搜索状态
+            document.getElementById('currentPage').textContent = '搜索';
+            document.getElementById('totalPages').textContent = '结果';
+        }
+
+        // 初始化应用
+        window.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
