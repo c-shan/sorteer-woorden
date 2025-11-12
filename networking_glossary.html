@@ -162,12 +162,6 @@
             color: #e74c3c;
         }
         
-        .chinese-translation {
-            font-size: 0.95em;
-            color: #e74c3c;
-            font-weight: 500;
-        }
-        
         .term-image-link {
             font-size: 0.85em;
             color: #3498db;
@@ -181,7 +175,13 @@
             text-decoration: underline;
         }
         
-        .term-description {
+        .term-description-section {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .english-desc {
             padding: 8px;
             border-radius: 6px;
             font-size: 0.9em;
@@ -192,9 +192,18 @@
             transition: all 0.2s ease;
         }
         
-        .term-description:hover {
+        .english-desc:hover {
             background: #e9ecef;
             transform: translateX(3px);
+        }
+        
+        .chinese-desc {
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            line-height: 1.4;
+            background: #f0f7ff;
+            border-left: 3px solid #e74c3c;
         }
         
         .learned-indicator {
@@ -304,724 +313,310 @@
             {
                 term: "10Base2",
                 textDesc: "An early Ethernet standard using thin coaxial cable (thinnet) forming a bus topology. Limited to 185 meters per segment.",
-                chinese: "10Base2 细缆以太网"
+                chinese: "10Base2 细缆以太网 - 使用细同轴电缆形成总线拓扑的早期以太网标准。每个网段限制为185米。"
             },
             {
                 term: "10Base5",
                 textDesc: "An early Ethernet standard using thick coaxial cable forming a bus topology. Known as 'Thicknet', it could span 500 meters per segment.",
-                chinese: "10Base5 粗缆以太网"
+                chinese: "10Base5 粗缆以太网 - 使用粗同轴电缆形成总线拓扑的早期以太网标准。被称为'粗缆'，每个网段可达500米。"
             },
             {
                 term: "10BaseT",
                 textDesc: "An Ethernet standard using twisted-pair cable (Cat 3 or higher) in a star topology. Limited to 100 meters from hub to node.",
-                chinese: "10BaseT 双绞线以太网"
+                chinese: "10BaseT 双绞线以太网 - 使用双绞线在星型拓扑中的以太网标准。从集线器到节点的距离限制为100米。"
             },
             {
                 term: "100BaseFX",
                 textDesc: "A Fast Ethernet standard (100 Mbps) over fiber-optic cable, used for longer distance connections (up to 2 km).",
-                chinese: "100BaseFX 光纤快速以太网"
+                chinese: "100BaseFX 光纤快速以太网 - 通过光纤电缆的快速以太网标准，用于更长距离连接（最长2公里）。"
             },
             {
                 term: "100BaseT4",
                 textDesc: "An early 100 Mbps Ethernet standard that used all four pairs of Cat 3 UTP cable. Largely obsolete.",
-                chinese: "100BaseT4 四对线快速以太网"
+                chinese: "100BaseT4 四对线快速以太网 - 使用Cat 3 UTP电缆所有四对的早期100 Mbps以太网标准。基本已过时。"
             },
             {
                 term: "100BaseTX",
                 textDesc: "The most common Fast Ethernet standard (100 Mbps) over Cat 5 UTP cable, using two wire pairs.",
-                chinese: "100BaseTX 双绞线快速以太网"
+                chinese: "100BaseTX 双绞线快速以太网 - 通过Cat 5 UTP电缆使用两对电线的最常见快速以太网标准。"
             },
             {
                 term: "100VG AnyLan",
                 textDesc: "A networking standard that competed with Fast Ethernet. It used a demand priority protocol instead of CSMA/CD.",
-                chinese: "100VG AnyLan 标准"
+                chinese: "100VG AnyLan 标准 - 与快速以太网竞争的网络标准。它使用需求优先级协议而不是CSMA/CD。"
             },
             {
                 term: "1000BaseT",
                 textDesc: "A Gigabit Ethernet standard (1000 Mbps) running over standard Cat 5e or better twisted-pair cable.",
-                chinese: "1000BaseT 千兆以太网"
+                chinese: "1000BaseT 千兆以太网 - 通过标准Cat 5e或更好双绞线电缆运行的千兆以太网标准。"
             },
             {
                 term: "1000000000BaseT",
                 textDesc: "This is a humorous or formal way of writing 'Gigabit Ethernet' (1,000,000,000 bits per second = 1 Gbps).",
-                chinese: "千兆以太网（十亿比特）"
+                chinese: "千兆以太网（十亿比特） - 这是写'千兆以太网'的幽默或正式方式。"
             },
             {
                 term: "802.2",
                 textDesc: "The IEEE Logical Link Control (LLC) sublayer, part of the data link layer. It provides a common interface for network protocols.",
-                chinese: "802.2 LLC逻辑链路控制"
+                chinese: "802.2 LLC逻辑链路控制 - IEEE逻辑链路控制子层，数据链路层的一部分。它为网络协议提供通用接口。"
             },
             {
                 term: "802.3",
                 textDesc: "The IEEE standard defining Ethernet, covering the physical layer and the MAC sublayer of the data link layer.",
-                chinese: "802.3 以太网标准"
+                chinese: "802.3 以太网标准 - 定义以太网的IEEE标准，涵盖物理层和数据链路层的MAC子层。"
             },
             {
                 term: "802.11",
                 textDesc: "The family of IEEE standards that define Wireless Local Area Networking (Wi-Fi).",
-                chinese: "802.11 无线网络标准"
-            },
-            {
-                term: "8088 processor",
-                textDesc: "The 16-bit microprocessor used in the original IBM PC (1981).",
-                chinese: "8088 处理器"
-            },
-            {
-                term: "80286 processor",
-                textDesc: "A 16-bit Intel processor (the '286') that introduced protected mode and was used in IBM PC/AT computers.",
-                chinese: "80286 处理器"
-            },
-            {
-                term: "80386 processor",
-                textDesc: "The first 32-bit Intel processor (the '386'), a major step forward in performance and capability for PCs.",
-                chinese: "80386 处理器"
-            },
-            {
-                term: "80486 processor",
-                textDesc: "An Intel 32-bit processor (the '486') that integrated a math coprocessor and cache on the chip.",
-                chinese: "80486 处理器"
-            },
-            {
-                term: "AAUI",
-                textDesc: "Apple Attachment Unit Interface. A proprietary Ethernet port on early Apple Macintoshes that required an external transceiver.",
-                chinese: "AAUI 苹果专用接口"
-            },
-            {
-                term: "access rights",
-                textDesc: "The permissions granted to a user or group for a specific resource like a file, folder, or printer.",
-                chinese: "访问权限"
-            },
-            {
-                term: "account",
-                textDesc: "A unique identity on a computer system or network, associated with a user, containing credentials and settings.",
-                chinese: "账户"
-            },
-            {
-                term: "acronym",
-                textDesc: "A word formed from the initial letters of other words (e.g., LAN for Local Area Network).",
-                chinese: "首字母缩略词"
-            },
-            {
-                term: "Active Directory",
-                textDesc: "Microsoft's directory service for Windows domain networks, used for centralized management of users, computers, and policies.",
-                chinese: "Active Directory 活动目录"
-            },
-            {
-                term: "Active Server Pages",
-                textDesc: "A Microsoft technology for creating dynamic, server-side web pages, now largely superseded by ASP.NET.",
-                chinese: "Active Server Pages 动态服务器页面"
-            },
-            {
-                term: "adapter card",
-                textDesc: "A circuit board that is installed into a computer to provide additional functionality, such as a network connection.",
-                chinese: "适配卡"
-            },
-            {
-                term: "address book",
-                textDesc: "A database, either in an email client or on a server, used for storing contact information, especially email addresses.",
-                chinese: "地址簿"
-            },
-            {
-                term: "administrator",
-                textDesc: "The user account with the highest level of privileges, responsible for managing a computer or network.",
-                chinese: "管理员"
-            },
-            {
-                term: "AFP",
-                textDesc: "Apple Filing Protocol. The network protocol for file services in classic Mac OS and macOS.",
-                chinese: "AFP 苹果文件协议"
-            },
-            {
-                term: "AGP",
-                textDesc: "Accelerated Graphics Port. A high-speed point-to-point channel for attaching a graphics card to a computer's motherboard.",
-                chinese: "AGP 加速图形端口"
-            },
-            {
-                term: "allocation unit",
-                textDesc: "Also known as a 'cluster.' It is the smallest amount of disk space that can be allocated to hold a file.",
-                chinese: "分配单元"
-            },
-            {
-                term: "antivirus program",
-                textDesc: "Software designed to detect, prevent, and remove malicious software (malware).",
-                chinese: "防病毒程序"
-            },
-            {
-                term: "Apache",
-                textDesc: "A popular and widely-used open-source web server software.",
-                chinese: "Apache Web服务器"
-            },
-            {
-                term: "AppleTalk",
-                textDesc: "A proprietary suite of networking protocols developed by Apple for their Macintosh computers.",
-                chinese: "AppleTalk 苹果网络协议"
-            },
-            {
-                term: "application layer",
-                textDesc: "Layer 7 of the OSI model. This is where network applications (like web browsers, email clients) operate and access network services.",
-                chinese: "应用层"
-            },
-            {
-                term: "archive bit",
-                textDesc: "A file attribute (flag) used by backup software to determine if a file has been modified since the last backup.",
-                chinese: "归档位"
-            },
-            {
-                term: "ARCnet",
-                textDesc: "Attached Resource Computer NETwork. An early token-passing network technology, popular before Ethernet dominated.",
-                chinese: "ARCnet 网络"
-            },
-            {
-                term: "Athlon",
-                textDesc: "A line of x86-compatible processors designed and manufactured by AMD, competing with Intel's Pentium series.",
-                chinese: "Athlon 处理器"
-            },
-            {
-                term: "attributes",
-                textDesc: "Metadata properties of a file or directory, such as Read-only, Hidden, Archive, and System.",
-                chinese: "属性"
-            },
-            {
-                term: "AUI",
-                textDesc: "Attachment Unit Interface. A 15-pin connector used to connect an Ethernet device to a transceiver.",
-                chinese: "AUI 连接接口"
-            },
-            {
-                term: "AUTOEXEC.BAT",
-                textDesc: "A startup batch file in DOS that automatically executes a series of commands when the system boots.",
-                chinese: "AUTOEXEC.BAT 自动执行批处理"
-            },
-            {
-                term: "AUTOEXEC.NCF",
-                textDesc: "A startup script file in Novell NetWare that executes commands to configure the server and load modules.",
-                chinese: "AUTOEXEC.NCF NetWare自动执行"
-            },
-            {
-                term: "backbone",
-                textDesc: "The core part of a network that carries the most traffic, interconnecting different parts of the network.",
-                chinese: "骨干网"
-            },
-            {
-                term: "backOffice",
-                textDesc: "A former Microsoft server suite that included products like Windows NT Server, Exchange Server, and SQL Server.",
-                chinese: "BackOffice 服务器套件"
-            },
-            {
-                term: "backup",
-                textDesc: "The process of copying data to a secondary location for the purpose of preservation in case of equipment failure.",
-                chinese: "备份"
-            },
-            {
-                term: "banner",
-                textDesc: "A message displayed during the login process, often used for legal notifications or warnings.",
-                chinese: "横幅"
-            },
-            {
-                term: "batch file",
-                textDesc: "A script file in DOS, OS/2, and Windows containing a series of commands to be executed by the command interpreter.",
-                chinese: "批处理文件"
-            },
-            {
-                term: "BDC",
-                textDesc: "Backup Domain Controller. In Windows NT, a server that held a read-only copy of the domain security database.",
-                chinese: "BDC 备份域控制器"
-            },
-            {
-                term: "benchmark",
-                textDesc: "A standard test or set of tests used to compare the performance of hardware or software.",
-                chinese: "基准测试"
-            },
-            {
-                term: "bluebook",
-                textDesc: "The formal standard document that defines the format for CD-ROM discs.",
-                chinese: "蓝皮书 CD标准"
-            },
-            {
-                term: "BNC connector",
-                textDesc: "A type of RF connector used with coaxial cable, commonly used with 10Base2 Ethernet.",
-                chinese: "BNC 连接器"
-            },
-            {
-                term: "bottleneck",
-                textDesc: "A point in a system where the flow of data is restricted, causing a decrease in overall performance.",
-                chinese: "瓶颈"
-            },
-            {
-                term: "bridge",
-                textDesc: "A network device that connects and filters traffic between two network segments at the data link layer.",
-                chinese: "网桥"
-            },
-            {
-                term: "broadband",
-                textDesc: "A high-capacity transmission technique using a wide range of frequencies, allowing multiple signals to travel simultaneously.",
-                chinese: "宽带"
-            },
-            {
-                term: "buffer",
-                textDesc: "A temporary region of memory used to hold data while it is being moved from one place to another.",
-                chinese: "缓冲区"
-            },
-            {
-                term: "bus",
-                textDesc: "A communication system that transfers data between components inside a computer or between computers.",
-                chinese: "总线"
-            },
-            {
-                term: "cable tie",
-                textDesc: "A fastener, usually made of nylon, for holding together electronic cables or wires.",
-                chinese: "扎带"
-            },
-            {
-                term: "cache",
-                textDesc: "A small, fast memory store that holds frequently accessed data to speed up subsequent access.",
-                chinese: "缓存"
-            },
-            {
-                term: "Category 3",
-                textDesc: "A grade of UTP cable rated for voice and data up to 10 Mbps, primarily used for 10BaseT Ethernet.",
-                chinese: "三类线"
-            },
-            {
-                term: "Category 5",
-                textDesc: "A grade of UTP cable rated for data up to 100 Mbps, used for 100BaseTX and 1000BaseT Ethernet.",
-                chinese: "五类线"
-            },
-            {
-                term: "Category 6",
-                textDesc: "A grade of UTP cable rated for data up to 10 Gbps, with better specifications for crosstalk.",
-                chinese: "六类线"
-            },
-            {
-                term: "CD-R drive",
-                textDesc: "Compact Disc-Recordable. A drive that can write data to a CD-R disc once.",
-                chinese: "CD-R 驱动器"
-            },
-            {
-                term: "CD-ROM",
-                textDesc: "Compact Disc-Read Only Memory. A pre-pressed optical compact disc which contains data.",
-                chinese: "CD-ROM 只读光盘"
-            },
-            {
-                term: "CD-RW drive",
-                textDesc: "Compact Disc-ReWritable. A drive that can write and erase data on a CD-RW disc multiple times.",
-                chinese: "CD-RW 可重写驱动器"
-            },
-            {
-                term: "Certified NetWare Engineer",
-                textDesc: "A former professional certification for Novell NetWare network administrators and engineers.",
-                chinese: "NetWare认证工程师"
-            },
-            {
-                term: "Certified Network Dummy",
-                textDesc: "A humorous, self-deprecating term for someone new to networking, not a real certification.",
-                chinese: "认证网络菜鸟"
-            },
-            {
-                term: "chat",
-                textDesc: "Real-time text communication between two or more people over a network.",
-                chinese: "聊天"
-            },
-            {
-                term: "Chaucer",
-                textDesc: "The father of English literature; his name was used as a code name for an early Microsoft networking project.",
-                chinese: "乔叟（项目代号）"
-            },
-            {
-                term: "cheapernet",
-                textDesc: "A colloquial name for 10Base2 (thin Ethernet) because it was less expensive than 10Base5 (thick Ethernet).",
-                chinese: "廉价网"
-            },
-            {
-                term: "CHKDSK",
-                textDesc: "A system tool in DOS and Windows that checks a hard disk or floppy disk for file system errors.",
-                chinese: "CHKDSK 磁盘检查"
-            },
-            {
-                term: "click",
-                textDesc: "The act of pressing and releasing a button on a computer mouse.",
-                chinese: "点击"
-            },
-            {
-                term: "client/server",
-                textDesc: "A network architecture where computers (clients) request services and resources from a central computer (server).",
-                chinese: "客户端/服务器"
-            },
-            {
-                term: "Clouseau",
-                textDesc: "A bumbling detective; his name was used as a code name for an early Microsoft networking project.",
-                chinese: "克鲁索（项目代号）"
-            },
-            {
-                term: "cluster",
-                textDesc: "The smallest logical amount of disk space that can be allocated to hold a file. Consists of one or more sectors.",
-                chinese: "簇"
-            },
-            {
-                term: "coaxial cable",
-                textDesc: "A type of cable with a central conductor surrounded by a shield, used for cable TV and early Ethernet.",
-                chinese: "同轴电缆"
-            },
-            {
-                term: "Com1,Com2",
-                textDesc: "The logical names assigned to the first and second serial communication ports on a PC.",
-                chinese: "COM1,COM2 串行端口"
-            },
-            {
-                term: "computername",
-                textDesc: "A unique name assigned to a computer on a network to identify it.",
-                chinese: "计算机名"
-            },
-            {
-                term: "cone of silence",
-                textDesc: "A fictional device from Get Smart; in IT, it refers to a (mythical) state of perfect privacy for a discussion.",
-                chinese: "静默锥"
-            },
-            {
-                term: "CONFIG.SYS",
-                textDesc: "A configuration file in DOS that loads device drivers and configures the operating system environment at boot.",
-                chinese: "CONFIG.SYS 系统配置"
-            },
-            {
-                term: "CONSOLE",
-                textDesc: "In NetWare, the command-line interface on the physical server used for administrative tasks.",
-                chinese: "控制台"
-            },
-            {
-                term: "console operator",
-                textDesc: "In NetWare, a user assigned rights to perform specific administrative tasks from a workstation.",
-                chinese: "控制台操作员"
-            },
-            {
-                term: "Control Panel",
-                textDesc: "A component of Microsoft Windows that provides a set of applets for system settings and management.",
-                chinese: "控制面板"
-            },
-            {
-                term: "CPU",
-                textDesc: "Central Processing Unit. The electronic circuitry that executes instructions of a computer program.",
-                chinese: "CPU 中央处理器"
-            },
-            {
-                term: "crimp tool",
-                textDesc: "A tool used to attach a connector to the end of a cable by deforming one piece to hold the other.",
-                chinese: "压线钳"
-            },
-            {
-                term: "cross-over cable",
-                textDesc: "A twisted-pair cable where the transmit and receive lines are crossed, allowing two devices to connect directly.",
-                chinese: "交叉电缆"
-            },
-            {
-                term: "CSMA/CA",
-                textDesc: "Carrier Sense Multiple Access with Collision Avoidance. A network access method used by Wi-Fi.",
-                chinese: "CSMA/CA 冲突避免"
-            },
-            {
-                term: "CSMA/CD",
-                textDesc: "Carrier Sense Multiple Access with Collision Detection. The network access method used by classic Ethernet.",
-                chinese: "CSMA/CD 冲突检测"
-            },
-            {
-                term: "daisy-chain",
-                textDesc: "A wiring scheme where devices are connected in sequence, one after the other.",
-                chinese: "菊花链"
-            },
-            {
-                term: "DAT",
-                textDesc: "Digital Audio Tape. A signal recording and playback medium that was also used for data backup.",
-                chinese: "DAT 数字音频磁带"
-            },
-            {
-                term: "data-link layer",
-                textDesc: "Layer 2 of the OSI model. It is responsible for node-to-node data transfer and error correction from the physical layer.",
-                chinese: "数据链路层"
-            },
-            {
-                term: "dedicated server",
-                textDesc: "A computer specifically set up to provide one or more network services and not for general use.",
-                chinese: "专用服务器"
-            },
-            {
-                term: "delayed write",
-                textDesc: "A performance optimization where data to be written to disk is held in a cache first, then written later.",
-                chinese: "延迟写入"
-            },
-            {
-                term: "differential backup",
-                textDesc: "A backup that copies all files that have changed since the last full backup.",
-                chinese: "差异备份"
-            },
-            {
-                term: "DIP switch",
-                textDesc: "Dual In-line Package switch. A small switch used to configure settings on hardware like motherboards or expansion cards.",
-                chinese: "DIP 开关"
-            },
-            {
-                term: "directory hash",
-                textDesc: "A technique used in NetWare to speed up directory lookups by using a hashing algorithm.",
-                chinese: "目录哈希"
-            },
-            {
-                term: "disk",
-                textDesc: "A general term for a data storage device using magnetic or optical storage (e.g., HDD, SSD, CD).",
-                chinese: "磁盘"
-            },
-            {
-                term: "distribution",
-                textDesc: "In the Linux world, a unique version of the Linux operating system that packages the kernel with software.",
-                chinese: "发行版"
-            },
-            {
-                term: "DMA channel",
-                textDesc: "Direct Memory Access channel. A system pathway that allows hardware devices to transfer data directly to memory without CPU involvement.",
-                chinese: "DMA 通道"
-            },
-            {
-                term: "DNS",
-                textDesc: "Domain Name System. The hierarchical system that translates human-friendly domain names into IP addresses.",
-                chinese: "DNS 域名系统"
-            },
-            {
-                term: "domain",
-                textDesc: "A group of computers and devices on a network that are administered as a unit with common rules and procedures.",
-                chinese: "域"
-            },
-            {
-                term: "domain Name System (DNS)",
-                textDesc: "Same as DNS.",
-                chinese: "域名系统（DNS）"
-            },
-            {
-                term: "DOS",
-                textDesc: "Disk Operating System. A single-tasking, single-user OS with a command-line interface, a precursor to Windows.",
-                chinese: "DOS 磁盘操作系统"
-            },
-            {
-                term: "dot-matrix printer",
-                textDesc: "An impact printer that produces text and graphics by striking pins against an ink ribbon.",
-                chinese: "点阵打印机"
-            },
-            {
-                term: "dumb terminal",
-                textDesc: "A computer terminal that has no independent processing capability and is used to access a mainframe.",
-                chinese: "哑终端"
-            },
-            {
-                term: "DVD drive",
-                textDesc: "Digital Versatile Disc. An optical disc storage format with greater capacity than a CD.",
-                chinese: "DVD 驱动器"
-            },
-            {
-                term: "Eddie Haskell",
-                textDesc: "A fictional character known for being duplicitous; his name was used as a code name for an early Microsoft project.",
-                chinese: "埃迪·哈斯克尔（项目代号）"
-            },
-            {
-                term: "e-mail",
-                textDesc: "Electronic mail; a method of exchanging digital messages between people using digital devices.",
-                chinese: "电子邮件"
-            },
-            {
-                term: "emoticon",
-                textDesc: "A facial expression pictorially represented by punctuation and letters, used to convey emotion in text.",
-                chinese: "表情符号"
-            },
-            {
-                term: "encryption",
-                textDesc: "The process of converting information or data into a code, especially to prevent unauthorized access.",
-                chinese: "加密"
-            },
-            {
-                term: "enterprise computing",
-                textDesc: "The use of computers and networks to manage the large-scale information needs of a big company.",
-                chinese: "企业计算"
-            },
-            {
-                term: "Ethernet",
-                textDesc: "The most common set of standards for wired local area networks (LANs).",
-                chinese: "以太网"
-            },
-            {
-                term: "EtherTalk",
-                textDesc: "Apple's implementation of the Ethernet networking standard for Macintosh computers.",
-                chinese: "EtherTalk 苹果以太网"
-            },
-            {
-                term: "ETLA",
-                textDesc: "Extended Three-Letter Acronym. A humorous term for an acronym that is longer than three letters.",
-                chinese: "扩展三字母缩写"
-            },
-            {
-                term: "Exchange Server",
-                textDesc: "A mail server, calendaring software, and contact manager developed by Microsoft.",
-                chinese: "Exchange 服务器"
-            },
-            {
-                term: "Fast Ethernet",
-                textDesc: "The collective term for Ethernet standards that carry traffic at 100 Mbit/s.",
-                chinese: "快速以太网"
-            },
-            {
-                term: "FAT",
-                textDesc: "File Allocation Table. A simple file system used by DOS and early versions of Windows.",
-                chinese: "FAT 文件分配表"
-            },
-            {
-                term: "FAT32",
-                textDesc: "An extension of the FAT file system that uses 32-bit cluster entries, supporting larger volumes.",
-                chinese: "FAT32 文件系统"
-            },
-            {
-                term: "FDDI",
-                textDesc: "Fiber Distributed Data Interface. A standard for data transmission on fiber optic lines in a ring topology.",
-                chinese: "FDDI 光纤分布式数据接口"
-            },
-            {
-                term: "Fedora",
-                textDesc: "A popular Linux distribution sponsored by Red Hat.",
-                chinese: "Fedora Linux"
-            },
-            {
-                term: "ferrule",
-                textDesc: "A rigid ring or cap used to align and protect the stripped end of a fiber, often found in connectors like ST or SC.",
-                chinese: "ferrule 光纤套圈"
-            },
-            {
-                term: "fiber-optic cable",
-                textDesc: "A cable containing one or more optical fibers that carry light for long-distance, high-bandwidth communication.",
-                chinese: "光纤电缆"
-            },
-            {
-                term: "file rights",
-                textDesc: "Same as access rights.",
-                chinese: "文件权限"
-            },
-            {
-                term: "file server",
-                textDesc: "A computer responsible for the central storage and management of data files for other computers on the network.",
-                chinese: "文件服务器"
-            },
-            {
-                term: "firewall",
-                textDesc: "A network security system that monitors and controls incoming and outgoing network traffic based on rules.",
-                chinese: "防火墙"
-            },
-            {
-                term: "fish tape",
-                textDesc: "A tool used by electricians to pull new wires through conduits and walls.",
-                chinese: "穿线带"
-            },
-            {
-                term: "forest",
-                textDesc: "In Active Directory, the highest-level logical container that contains a collection of domains.",
-                chinese: "森林"
-            },
-            {
-                term: "FTP",
-                textDesc: "File Transfer Protocol. A standard network protocol used to transfer computer files between a client and server.",
-                chinese: "FTP 文件传输协议"
-            },
-            {
-                term: "full backup",
-                textDesc: "A backup that copies all selected files and data, regardless of the archive bit state.",
-                chinese: "完全备份"
-            },
-            {
-                term: "gateway",
-                textDesc: "A network node that connects two networks using different protocols, often between a LAN and the Internet.",
-                chinese: "网关"
-            },
-            {
-                term: "GB",
-                textDesc: "Gigabyte. A unit of data storage equal to approximately one billion bytes.",
-                chinese: "GB 千兆字节"
-            },
-            {
-                term: "generation backup",
-                textDesc: "A backup rotation scheme (e.g., Grandfather-Father-Son) that maintains multiple generations of backups.",
-                chinese: "代备份"
-            },
-            {
-                term: "generation gap",
-                textDesc: "The technological difference between older and newer systems, making interoperability difficult.",
-                chinese: "代沟"
-            },
-            {
-                term: "glass house",
-                textDesc: "A term for a heavily controlled, centralized data center, often with physical glass walls.",
-                chinese: "玻璃房"
-            },
-            {
-                term: "GNOME",
-                textDesc: "A popular, free, and open-source desktop environment for Linux.",
-                chinese: "GNOME 桌面环境"
-            },
-            {
-                term: "group account",
-                textDesc: "An account that contains multiple user accounts, used to assign permissions to many users at once.",
-                chinese: "组账户"
-            },
-            {
-                term: "groupware",
-                textDesc: "Software designed to help people collaborate and work together over a network.",
-                chinese: "群件"
-            },
-            {
-                term: "guest",
-                textDesc: "A default user account with very limited permissions, often for temporary or anonymous access.",
-                chinese: "访客账户"
-            },
-            {
-                term: "guru",
-                textDesc: "A slang term for an expert or authority in a particular technical field.",
-                chinese: "专家"
-            },
-            {
-                term: "hotspot",
-                textDesc: "A physical location where people can obtain Internet access, typically using Wi-Fi.",
-                chinese: "热点"
-            },
-            {
-                term: "html",
-                textDesc: "HyperText Markup Language. The standard markup language for creating web pages.",
-                chinese: "HTML 超文本标记语言"
-            },
-            {
-                term: "http",
-                textDesc: "Hypertext Transfer Protocol. The foundation of data communication for the World Wide Web.",
-                chinese: "HTTP 超文本传输协议"
-            },
-            {
-                term: "https",
-                textDesc: "HTTP Secure. The secure version of HTTP, using encryption (SSL/TLS) to protect data.",
-                chinese: "HTTPS 安全超文本传输协议"
-            },
-            {
-                term: "hub",
-                textDesc: "A basic networking device that connects multiple Ethernet devices, broadcasting data to all ports.",
-                chinese: "集线器"
-            },
-            {
-                term: "I/O port address",
-                textDesc: "A memory address used by the CPU to communicate with a specific hardware device.",
-                chinese: "I/O 端口地址"
-            },
-            {
-                term: "IACI",
-                textDesc: "A humorous, self-deprecating acronym used by overworked network admins: 'I Am Completely Insane'.",
-                chinese: "我完全疯了（幽默用语）"
-            },
-            {
-                term: "IDE",
-                textDesc: "Integrated Drive Electronics. A standard interface for connecting storage devices like hard drives to a PC.",
-                chinese: "IDE 集成驱动器电子设备"
-            },
-            {
-                term: "IEEE",
-                textDesc: "Institute of Electrical and Electronics Engineers. A professional organization that defines many networking standards.",
-                chinese: "IEEE 电气电子工程师学会"
-            },
-            {
-                term: "incremental backup",
-                textDesc: "A backup that only copies files that have changed since the last backup (full or incremental).",
-                chinese
+                chinese: "802.11 无线网络标准 - 定义无线局域网的IEEE标准系列。"
+            }
+        ];
+
+        // 应用程序状态
+        let currentPage = 1;
+        const termsPerPage = 20;
+        let learnedTerms = JSON.parse(localStorage.getItem('learnedTerms')) || {};
+        let lastLearnedTerm = localStorage.getItem('lastLearnedTerm') || '暂无';
+
+        // 初始化应用程序
+        function initApp() {
+            displayPage(currentPage);
+            updateProgress();
+            setupEventListeners();
+            updateTotalPages();
+        }
+
+        // 显示特定页面的术语
+        function displayPage(page) {
+            const container = document.getElementById('termsContainer');
+            const startIndex = (page - 1) * termsPerPage;
+            const endIndex = startIndex + termsPerPage;
+            const pageTerms = termsData.slice(startIndex, endIndex);
+
+            container.innerHTML = '';
+
+            if (pageTerms.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 40px; color: #666;">此页没有术语</div>';
+                return;
+            }
+
+            pageTerms.forEach(termData => {
+                const termRow = createTermRow(termData);
+                container.appendChild(termRow);
+            });
+
+            document.getElementById('currentPage').textContent = page;
+            updatePaginationButtons();
+        }
+
+        // 创建术语行
+        function createTermRow(termData) {
+            const row = document.createElement('div');
+            row.className = `term-row ${learnedTerms[termData.term] ? 'learned' : ''}`;
+            
+            // 构建维基百科链接
+            const wikiLink = `https://en.wikipedia.org/wiki/${encodeURIComponent(termData.term)}`;
+            
+            row.innerHTML = `
+                <div class="term-name-section">
+                    <div class="term-name" onclick="speakTerm('${termData.term}')">
+                        ${termData.term}
+                        ${learnedTerms[termData.term] ? '<span class="learned-indicator">✓</span>' : ''}
+                    </div>
+                    <a href="${wikiLink}" target="_blank" class="term-image-link">🖼️ 查看维基百科</a>
+                </div>
+                <div class="term-description-section">
+                    <div class="english-desc" onclick="speakText('${termData.textDesc.replace(/'/g, "\\'")}')">
+                        ${termData.textDesc}
+                    </div>
+                    <div class="chinese-desc">
+                        ${termData.chinese}
+                    </div>
+                </div>
+            `;
+
+            // 点击行标记为已学习
+            row.addEventListener('click', (e) => {
+                if (!e.target.classList.contains('term-image-link') && 
+                    !e.target.classList.contains('english-desc')) {
+                    toggleLearned(termData.term, termData.chinese);
+                    row.classList.toggle('learned');
+                    const indicator = row.querySelector('.learned-indicator');
+                    if (row.classList.contains('learned')) {
+                        if (!indicator) {
+                            const nameElement = row.querySelector('.term-name');
+                            const indicatorSpan = document.createElement('span');
+                            indicatorSpan.className = 'learned-indicator';
+                            indicatorSpan.textContent = ' ✓';
+                            nameElement.appendChild(indicatorSpan);
+                        }
+                    } else {
+                        if (indicator) {
+                            indicator.remove();
+                        }
+                    }
+                }
+            });
+
+            return row;
+        }
+
+        // 更新分页按钮状态
+        function updatePaginationButtons() {
+            const totalPages = Math.ceil(termsData.length / termsPerPage);
+            document.getElementById('prevPage').disabled = currentPage === 1;
+            document.getElementById('nextPage').disabled = currentPage >= totalPages;
+            document.getElementById('prevPageBottom').disabled = currentPage === 1;
+            document.getElementById('nextPageBottom').disabled = currentPage >= totalPages;
+            document.getElementById('firstPage').disabled = currentPage === 1;
+            document.getElementById('lastPage').disabled = currentPage >= totalPages;
+        }
+
+        // 更新总页数显示
+        function updateTotalPages() {
+            const totalPages = Math.ceil(termsData.length / termsPerPage);
+            document.getElementById('totalPages').textContent = totalPages;
+        }
+
+        // 更新学习进度
+        function updateProgress() {
+            const learnedCount = Object.keys(learnedTerms).length;
+            const totalCount = termsData.length;
+            const progress = (learnedCount / totalCount) * 100;
+
+            document.getElementById('learnedCount').textContent = learnedCount;
+            document.getElementById('totalCount').textContent = totalCount;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+            document.getElementById('lastLearned').textContent = lastLearnedTerm;
+        }
+
+        // 发音功能 - 术语
+        function speakTerm(term) {
+            if ('speechSynthesis' in window) {
+                speechSynthesis.cancel(); // 停止当前语音
+                const utterance = new SpeechSynthesisUtterance(term);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.8;
+                speechSynthesis.speak(utterance);
+            } else {
+                alert('您的浏览器不支持文本转语音功能');
+            }
+        }
+
+        // 发音功能 - 英文描述
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                speechSynthesis.cancel(); // 停止当前语音
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.8;
+                speechSynthesis.speak(utterance);
+            } else {
+                alert('您的浏览器不支持文本转语音功能');
+            }
+        }
+
+        // 切换学习状态
+        function toggleLearned(term, chinese) {
+            if (learnedTerms[term]) {
+                delete learnedTerms[term];
+            } else {
+                learnedTerms[term] = true;
+                lastLearnedTerm = `${term} - ${chinese}`;
+                localStorage.setItem('lastLearnedTerm', lastLearnedTerm);
+            }
+            localStorage.setItem('learnedTerms', JSON.stringify(learnedTerms));
+            updateProgress();
+        }
+
+        // 设置事件监听器
+        function setupEventListeners() {
+            // 上一页按钮
+            document.getElementById('prevPage').addEventListener('click', goToPrevPage);
+            document.getElementById('prevPageBottom').addEventListener('click', goToPrevPage);
+            
+            // 下一页按钮
+            document.getElementById('nextPage').addEventListener('click', goToNextPage);
+            document.getElementById('nextPageBottom').addEventListener('click', goToNextPage);
+            
+            // 首页按钮
+            document.getElementById('firstPage').addEventListener('click', () => {
+                currentPage = 1;
+                displayPage(currentPage);
+            });
+            
+            // 末页按钮
+            document.getElementById('lastPage').addEventListener('click', () => {
+                currentPage = Math.ceil(termsData.length / termsPerPage);
+                displayPage(currentPage);
+            });
+
+            // 重置进度按钮
+            document.getElementById('resetProgress').addEventListener('click', () => {
+                if (confirm('确定要重置所有学习进度吗？')) {
+                    learnedTerms = {};
+                    lastLearnedTerm = '暂无';
+                    localStorage.removeItem('learnedTerms');
+                    localStorage.removeItem('lastLearnedTerm');
+                    displayPage(currentPage);
+                    updateProgress();
+                }
+            });
+
+            // 搜索功能
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                if (searchTerm) {
+                    const filteredTerms = termsData.filter(term => 
+                        term.term.toLowerCase().includes(searchTerm) ||
+                        term.chinese.toLowerCase().includes(searchTerm) ||
+                        term.textDesc.toLowerCase().includes(searchTerm)
+                    );
+                    displaySearchResults(filteredTerms);
+                } else {
+                    displayPage(currentPage);
+                }
+            });
+        }
+
+        // 转到上一页
+        function goToPrevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                displayPage(currentPage);
+            }
+        }
+
+        // 转到下一页
+        function goToNextPage() {
+            if (currentPage < Math.ceil(termsData.length / termsPerPage)) {
+                currentPage++;
+                displayPage(currentPage);
+            }
+        }
+
+        // 显示搜索结果
+        function displaySearchResults(results) {
+            const container = document.getElementById('termsContainer');
+            container.innerHTML = '';
+
+            if (results.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 40px; color: #666;">未找到匹配的术语</div>';
+                return;
+            }
+
+            results.forEach(termData => {
+                const termRow = createTermRow(termData);
+                container.appendChild(termRow);
+            });
+            
+            // 更新分页信息为搜索状态
+            document.getElementById('currentPage').textContent = '搜索';
+            document.getElementById('totalPages').textContent = '结果';
+        }
+
+        // 初始化应用
+        window.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
