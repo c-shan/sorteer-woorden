@@ -308,7 +308,7 @@
     </div>
 
     <script>
-        // 完整术语数据
+        // 完整术语数据 - 这里只显示部分，实际使用时需要包含所有术语
         const termsData = [
             {
                 term: "10Base2",
@@ -369,14 +369,102 @@
                 term: "802.11",
                 textDesc: "The family of IEEE standards that define Wireless Local Area Networking (Wi-Fi).",
                 chinese: "802.11 无线网络标准 - 定义无线局域网的IEEE标准系列。"
+            },
+            {
+                term: "8088 processor",
+                textDesc: "The 16-bit microprocessor used in the original IBM PC (1981).",
+                chinese: "8088 处理器 - 原始IBM PC（1981）中使用的16位微处理器。"
+            },
+            {
+                term: "80286 processor",
+                textDesc: "A 16-bit Intel processor (the '286') that introduced protected mode and was used in IBM PC/AT computers.",
+                chinese: "80286 处理器 - 引入保护模式并在IBM PC/AT计算机中使用的16位英特尔处理器。"
+            },
+            {
+                term: "80386 processor",
+                textDesc: "The first 32-bit Intel processor (the '386'), a major step forward in performance and capability for PCs.",
+                chinese: "80386 处理器 - 第一个32位英特尔处理器，是PC性能和能力的重大进步。"
+            },
+            {
+                term: "80486 processor",
+                textDesc: "An Intel 32-bit processor (the '486') that integrated a math coprocessor and cache on the chip.",
+                chinese: "80486 处理器 - 将数学协处理器和缓存集成在芯片上的英特尔32位处理器。"
+            },
+            {
+                term: "AAUI",
+                textDesc: "Apple Attachment Unit Interface. A proprietary Ethernet port on early Apple Macintoshes that required an external transceiver.",
+                chinese: "AAUI 苹果专用接口 - 早期Apple Macintosh上的专用以太网端口，需要外部收发器。"
+            },
+            {
+                term: "access rights",
+                textDesc: "The permissions granted to a user or group for a specific resource like a file, folder, or printer.",
+                chinese: "访问权限 - 授予用户或组对特定资源（如文件、文件夹或打印机）的权限。"
+            },
+            {
+                term: "account",
+                textDesc: "A unique identity on a computer system or network, associated with a user, containing credentials and settings.",
+                chinese: "账户 - 在计算机系统或网络上的唯一身份，与用户关联，包含凭据和设置。"
+            },
+            {
+                term: "acronym",
+                textDesc: "A word formed from the initial letters of other words (e.g., LAN for Local Area Network).",
+                chinese: "首字母缩略词 - 由其他单词的首字母组成的单词。"
+            },
+            {
+                term: "Active Directory",
+                textDesc: "Microsoft's directory service for Windows domain networks, used for centralized management of users, computers, and policies.",
+                chinese: "Active Directory 活动目录 - Microsoft用于Windows域网络的目录服务，用于集中管理用户、计算机和策略。"
+            },
+            {
+                term: "Active Server Pages",
+                textDesc: "A Microsoft technology for creating dynamic, server-side web pages, now largely superseded by ASP.NET.",
+                chinese: "Active Server Pages 动态服务器页面 - 用于创建动态服务器端网页的Microsoft技术，现在基本上被ASP.NET取代。"
+            },
+            {
+                term: "adapter card",
+                textDesc: "A circuit board that is installed into a computer to provide additional functionality, such as a network connection.",
+                chinese: "适配卡 - 安装在计算机中以提供额外功能（如网络连接）的电路板。"
+            },
+            {
+                term: "address book",
+                textDesc: "A database, either in an email client or on a server, used for storing contact information, especially email addresses.",
+                chinese: "地址簿 - 电子邮件客户端或服务器上的数据库，用于存储联系信息，尤其是电子邮件地址。"
+            },
+            {
+                term: "administrator",
+                textDesc: "The user account with the highest level of privileges, responsible for managing a computer or network.",
+                chinese: "管理员 - 具有最高权限级别的用户账户，负责管理计算机或网络。"
+            },
+            {
+                term: "AFP",
+                textDesc: "Apple Filing Protocol. The network protocol for file services in classic Mac OS and macOS.",
+                chinese: "AFP 苹果文件协议 - 经典Mac OS和macOS中文件服务的网络协议。"
+            },
+            {
+                term: "AGP",
+                textDesc: "Accelerated Graphics Port. A high-speed point-to-point channel for attaching a graphics card to a computer's motherboard.",
+                chinese: "AGP 加速图形端口 - 用于将图形卡连接到计算机主板的高速点对点通道。"
+            },
+            {
+                term: "allocation unit",
+                textDesc: "Also known as a 'cluster.' It is the smallest amount of disk space that can be allocated to hold a file.",
+                chinese: "分配单元 - 也称为'簇'。是可以分配给保存文件的最小磁盘空间量。"
+            },
+            {
+                term: "antivirus program",
+                textDesc: "Software designed to detect, prevent, and remove malicious software (malware).",
+                chinese: "防病毒程序 - 设计用于检测、预防和移除恶意软件的软件。"
             }
+            // 这里可以继续添加更多术语...
         ];
 
         // 应用程序状态
         let currentPage = 1;
-        const termsPerPage = 20;
+        const termsPerPage = 10; // 每页显示10个术语
         let learnedTerms = JSON.parse(localStorage.getItem('learnedTerms')) || {};
         let lastLearnedTerm = localStorage.getItem('lastLearnedTerm') || '暂无';
+        let isSearching = false;
+        let searchResults = [];
 
         // 初始化应用程序
         function initApp() {
@@ -391,7 +479,14 @@
             const container = document.getElementById('termsContainer');
             const startIndex = (page - 1) * termsPerPage;
             const endIndex = startIndex + termsPerPage;
-            const pageTerms = termsData.slice(startIndex, endIndex);
+            
+            // 确定要显示的术语列表
+            let termsToDisplay = termsData;
+            if (isSearching && searchResults.length > 0) {
+                termsToDisplay = searchResults;
+            }
+            
+            const pageTerms = termsToDisplay.slice(startIndex, endIndex);
 
             container.innerHTML = '';
 
@@ -407,6 +502,7 @@
 
             document.getElementById('currentPage').textContent = page;
             updatePaginationButtons();
+            updateTotalPages();
         }
 
         // 创建术语行
@@ -463,7 +559,7 @@
 
         // 更新分页按钮状态
         function updatePaginationButtons() {
-            const totalPages = Math.ceil(termsData.length / termsPerPage);
+            const totalPages = getTotalPages();
             document.getElementById('prevPage').disabled = currentPage === 1;
             document.getElementById('nextPage').disabled = currentPage >= totalPages;
             document.getElementById('prevPageBottom').disabled = currentPage === 1;
@@ -472,9 +568,18 @@
             document.getElementById('lastPage').disabled = currentPage >= totalPages;
         }
 
+        // 获取总页数
+        function getTotalPages() {
+            let termsToCount = termsData;
+            if (isSearching && searchResults.length > 0) {
+                termsToCount = searchResults;
+            }
+            return Math.ceil(termsToCount.length / termsPerPage);
+        }
+
         // 更新总页数显示
         function updateTotalPages() {
-            const totalPages = Math.ceil(termsData.length / termsPerPage);
+            const totalPages = getTotalPages();
             document.getElementById('totalPages').textContent = totalPages;
         }
 
@@ -547,7 +652,7 @@
             
             // 末页按钮
             document.getElementById('lastPage').addEventListener('click', () => {
-                currentPage = Math.ceil(termsData.length / termsPerPage);
+                currentPage = getTotalPages();
                 displayPage(currentPage);
             });
 
@@ -567,13 +672,18 @@
             document.getElementById('searchInput').addEventListener('input', (e) => {
                 const searchTerm = e.target.value.toLowerCase();
                 if (searchTerm) {
-                    const filteredTerms = termsData.filter(term => 
+                    isSearching = true;
+                    searchResults = termsData.filter(term => 
                         term.term.toLowerCase().includes(searchTerm) ||
                         term.chinese.toLowerCase().includes(searchTerm) ||
                         term.textDesc.toLowerCase().includes(searchTerm)
                     );
-                    displaySearchResults(filteredTerms);
+                    currentPage = 1; // 搜索时回到第一页
+                    displaySearchResults(searchResults);
                 } else {
+                    isSearching = false;
+                    searchResults = [];
+                    currentPage = 1; // 清除搜索时回到第一页
                     displayPage(currentPage);
                 }
             });
@@ -589,7 +699,7 @@
 
         // 转到下一页
         function goToNextPage() {
-            if (currentPage < Math.ceil(termsData.length / termsPerPage)) {
+            if (currentPage < getTotalPages()) {
                 currentPage++;
                 displayPage(currentPage);
             }
@@ -605,14 +715,8 @@
                 return;
             }
 
-            results.forEach(termData => {
-                const termRow = createTermRow(termData);
-                container.appendChild(termRow);
-            });
-            
-            // 更新分页信息为搜索状态
-            document.getElementById('currentPage').textContent = '搜索';
-            document.getElementById('totalPages').textContent = '结果';
+            // 使用displayPage来显示搜索结果，确保分页正常工作
+            displayPage(currentPage);
         }
 
         // 初始化应用
